@@ -1,3 +1,4 @@
+import Head from "next/head";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import WorkWithMeSection from "@/components/sections/WorkWithMeSection";
@@ -7,39 +8,46 @@ import BlogSection from "@/components/sections/BlogSection";
 import ContactSection from "@/components/sections/ContactSection";
 import Taskbar from "@/components/Taskbar";
 
-const Index = () => {
+export default function Index() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "AI × UX Professional",
+    jobTitle: "AI Engineer & UX Designer",
+    description:
+      "Hybrid professional bridging AI engineering and human-centered design.",
+    url: "https://portfolio.example.com",
+    knowsAbout: [
+      "Machine Learning",
+      "UX Design",
+      "User Research",
+      "AI Engineering",
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <HeroSection />
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </Head>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pb-32 space-y-12 -mt-12 relative z-10">
-        <AboutSection />
-        <WorkWithMeSection />
-        <ProjectsSection />
-        <ServicesSection />
-        <BlogSection />
-        <ContactSection />
-      </main>
+      <div className="relative min-h-screen bg-background overflow-x-hidden">
+        <HeroSection />
 
-      <Taskbar />
+        <main className="relative z-10 mx-auto max-w-5xl space-y-16 px-4 pb-32 sm:px-6 -mt-16">
+          <AboutSection />
+          <WorkWithMeSection />
+          <ProjectsSection />
+          <ServicesSection />
+          <BlogSection />
+          <ContactSection />
+        </main>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Person",
-            name: "AI × UX Professional",
-            jobTitle: "AI Engineer & UX Designer",
-            description: "Hybrid professional bridging AI engineering and human-centered design.",
-            url: "https://portfolio.example.com",
-            knowsAbout: ["Machine Learning", "UX Design", "User Research", "AI Engineering"],
-          }),
-        }}
-      />
-    </div>
+        <Taskbar />
+      </div>
+    </>
   );
-};
-
-export default Index;
+}

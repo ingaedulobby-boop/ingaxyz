@@ -1,15 +1,36 @@
 import WindowPanel from "@/components/WindowPanel";
-import { Github, Linkedin, Twitter, Send } from "lucide-react";
+import { Github, Linkedin, Twitter, Send, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const ContactSection = () => {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // placeholder
-    alert("Thanks for reaching out! I'll get back to you soon.");
-    setFormState({ name: "", email: "", message: "" });
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("send-contact-email", {
+        body: {
+          name: formState.name.trim(),
+          email: formState.email.trim(),
+          message: formState.message.trim(),
+        },
+      });
+
+      if (error) throw error;
+
+      toast.success("Message sent! I'll get back to you soon.");
+      setFormState({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error("Contact form error:", err);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -48,6 +69,7 @@ const ContactSection = () => {
               id="name"
               type="text"
               required
+              maxLength={100}
               value={formState.name}
               onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
               className="w-full px-4 py-2.5 rounded-lg bg-secondary/50 border border-border text-foreground 
@@ -61,6 +83,7 @@ const ContactSection = () => {
               id="email"
               type="email"
               required
+              maxLength={255}
               value={formState.email}
               onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
               className="w-full px-4 py-2.5 rounded-lg bg-secondary/50 border border-border text-foreground 
@@ -74,6 +97,7 @@ const ContactSection = () => {
               id="message"
               rows={4}
               required
+              maxLength={5000}
               value={formState.message}
               onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
               className="w-full px-4 py-2.5 rounded-lg bg-secondary/50 border border-border text-foreground 
@@ -83,11 +107,12 @@ const ContactSection = () => {
           </div>
           <button
             type="submit"
+            disabled={isSubmitting}
             className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-mono font-semibold 
-                       hover:glow-primary transition-all duration-300 hover:scale-105"
+                       hover:glow-primary transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Send className="w-4 h-4" />
-            Send Message
+            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {isSubmitting ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>

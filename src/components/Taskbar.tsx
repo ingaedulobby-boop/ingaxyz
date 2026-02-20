@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Home, User, Briefcase, FolderOpen, Wrench, FileText, Mail } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const navItems = [
   { icon: Home, label: "Home", href: "#home" },
@@ -22,7 +23,7 @@ const Taskbar = () => {
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 glass rounded-2xl px-2 py-2 flex gap-1"
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 glass rounded-2xl px-2 py-2 flex gap-1 items-center"
     >
       {navItems.map(({ icon: Icon, label, href }) => (
         <button
@@ -38,6 +39,8 @@ const Taskbar = () => {
           </span>
         </button>
       ))}
+      <div className="w-px h-8 bg-border mx-1" />
+      <ThemeToggle />
     </motion.nav>
   );
 };

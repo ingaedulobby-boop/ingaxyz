@@ -26,17 +26,23 @@ const Taskbar = () => {
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-4 py-2 rounded-2xl glass-strong shadow-2xl"
+      className="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 
+                 flex items-center gap-0.5 sm:gap-1 
+                 px-2 sm:px-4 py-1.5 sm:py-2 
+                 rounded-2xl glass-strong shadow-2xl
+                 max-w-[calc(100vw-1.5rem)] overflow-x-auto scrollbar-none"
     >
       {navItems.map(({ icon: Icon, label, href }) => (
         <button
           key={label}
           onClick={() => scrollTo(href)}
-          className="group relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl 
-                     hover:bg-secondary transition-colors duration-200"
+          className="group relative flex flex-col items-center gap-0.5 
+                     px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl 
+                     hover:bg-secondary transition-colors duration-200
+                     flex-shrink-0"
           aria-label={label}
         >
-          <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:text-primary transition-colors" />
           <span className="transition-colors hidden sm:block text-center font-mono text-[10px] text-muted-foreground group-hover:text-foreground">
             {label}
           </span>
@@ -47,7 +53,7 @@ const Taskbar = () => {
       <AnimatePresence>
         {minimizedWindows.length > 0 && (
           <>
-            <div className="w-px h-8 bg-border mx-1" />
+            <div className="w-px h-6 sm:h-8 bg-border mx-0.5 sm:mx-1 flex-shrink-0" />
             {minimizedWindows.map((w) => (
               <motion.button
                 key={w.id}
@@ -60,7 +66,8 @@ const Taskbar = () => {
                   const el = document.getElementById(w.id);
                   el?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-mono hover:bg-primary/20 transition-colors"
+                className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-primary/10 text-primary 
+                           text-[10px] sm:text-xs font-mono hover:bg-primary/20 transition-colors flex-shrink-0"
                 aria-label={`Restore ${w.title}`}
               >
                 {w.title}
@@ -70,7 +77,7 @@ const Taskbar = () => {
         )}
       </AnimatePresence>
 
-      <div className="w-px h-8 bg-border mx-1" />
+      <div className="w-px h-6 sm:h-8 bg-border mx-0.5 sm:mx-1 flex-shrink-0" />
       <ThemeToggle />
     </motion.nav>
   );

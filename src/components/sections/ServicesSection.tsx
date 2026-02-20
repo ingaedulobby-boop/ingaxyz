@@ -28,7 +28,7 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <WindowPanel title="services.config" id="services" accent="accent">
+    <WindowPanel title="services.config" id="services" accent="accent" draggable>
       <h2 className="text-2xl md:text-3xl font-bold mb-2">
         What I <span className="text-gradient">Offer</span>
       </h2>

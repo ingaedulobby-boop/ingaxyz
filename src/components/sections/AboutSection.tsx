@@ -14,7 +14,7 @@ const skills = [
 
 const AboutSection = () => {
   return (
-    <WindowPanel title="about_me.md" id="about" accent="accent">
+    <WindowPanel title="about_me.md" id="about" accent="accent" draggable>
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold mb-4">

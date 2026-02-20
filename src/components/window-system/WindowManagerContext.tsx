@@ -12,7 +12,14 @@ interface WindowManagerContextType {
   isMinimized: (id: string) => boolean;
 }
 
-const WindowManagerContext = createContext<WindowManagerContextType | null>(null);
+const defaultValue: WindowManagerContextType = {
+  minimizedWindows: [],
+  minimizeWindow: () => {},
+  restoreWindow: () => {},
+  isMinimized: () => false,
+};
+
+const WindowManagerContext = createContext<WindowManagerContextType>(defaultValue);
 
 export function WindowManagerProvider({ children }: { children: ReactNode }) {
   const [minimizedWindows, setMinimizedWindows] = useState<MinimizedWindow[]>([]);
@@ -41,7 +48,5 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
 }
 
 export function useWindowManager() {
-  const ctx = useContext(WindowManagerContext);
-  if (!ctx) throw new Error("WindowManagerProvider missing");
-  return ctx;
+  return useContext(WindowManagerContext);
 }

@@ -30,7 +30,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}>
 
-          <p className="font-mono text-primary text-sm md:text-base tracking-widest mb-4 uppercase">
+          <p className="font-mono text-primary text-sm tracking-widest mb-4 uppercase md:text-sm">
             AI Engineer · UX Designer · Researcher
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-mono font-bold leading-tight mb-6">

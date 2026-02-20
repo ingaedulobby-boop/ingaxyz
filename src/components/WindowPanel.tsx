@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion, useTransform } from "framer-motion";
 import React, { ReactNode, useState, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { Minus, Maximize2, Minimize2, X } from "lucide-react";
@@ -58,12 +58,6 @@ export default function WindowPanel({
     return () => window.removeEventListener("keydown", handler);
   }, [isFocused, isMaximized]);
 
-  // Restore from minimized
-  useEffect(() => {
-    if (!minimized) return;
-    // Component stays rendered but content hidden
-  }, [minimized]);
-
   const handleDragEnd = useCallback(
     (_: any, info: { offset: { x: number; y: number } }) => {
       const snappedX = snapToGrid(snapX.get() + info.offset.x);
@@ -74,11 +68,20 @@ export default function WindowPanel({
     [snapX, snapY]
   );
 
-  // 3D tilt
+  // 3D tilt with dynamic shadow
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
   const springRotateX = useSpring(rotateX, { stiffness: 200, damping: 20 });
   const springRotateY = useSpring(rotateY, { stiffness: 200, damping: 20 });
+
+  // Dynamic shadow based on tilt
+  const shadowX = useTransform(springRotateY, [-6, 6], [12, -12]);
+  const shadowY = useTransform(springRotateX, [-6, 6], [-12, 12]);
+  const dynamicShadow = useTransform(
+    [shadowX, shadowY],
+    ([sx, sy]: number[]) =>
+      `${sx}px ${sy}px 40px -10px hsl(225 25% 0% / 0.18), 0 0 1px hsl(var(--window-border))`
+  );
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -128,8 +131,9 @@ export default function WindowPanel({
       style={{
         transformStyle: "preserve-3d",
         perspective: 1000,
-        rotateX: prefersReducedMotion ? 0 : springRotateX,
-        rotateY: prefersReducedMotion ? 0 : springRotateY,
+        rotateX: prefersReducedMotion || isMobile ? 0 : springRotateX,
+        rotateY: prefersReducedMotion || isMobile ? 0 : springRotateY,
+        boxShadow: prefersReducedMotion || isMobile ? undefined : dynamicShadow,
         x: canDrag ? springX : undefined,
         y: canDrag ? springY : undefined,
       }}
@@ -137,14 +141,16 @@ export default function WindowPanel({
         "relative w-full",
         "rounded-2xl",
         "border border-border",
-        "backdrop-blur-xl",
         "bg-card/80",
-        "shadow-xl window-shadow",
         "transition-all duration-300",
         "will-change-transform",
         "overflow-hidden outline-none",
-        isFocused && "ring-1 ring-primary/20",
-        isMaximized && "!fixed !inset-4 !z-50 !rounded-2xl",
+        // Focused: ring + blur
+        isFocused && "ring-1 ring-primary/30 window-focused-blur",
+        !isFocused && "backdrop-blur-xl",
+        // Only apply default shadow when not using dynamic shadow (mobile)
+        isMobile && "window-shadow",
+        isMaximized && "!fixed !inset-2 sm:!inset-4 !z-50 !rounded-2xl",
         className
       )}
     >
@@ -156,12 +162,17 @@ export default function WindowPanel({
         transition={{ duration: 0.3 }}
       />
 
+      {/* Focused ambient glow */}
+      {isFocused && !isMobile && (
+        <div className="absolute -inset-px pointer-events-none rounded-2xl bg-gradient-to-br from-primary/10 via-transparent to-accent/10 blur-sm" />
+      )}
+
       {/* Header / Title bar */}
       <div
         className={clsx(
           "flex items-center justify-between",
-          "px-4 sm:px-6",
-          "py-3",
+          "px-3 sm:px-6",
+          "py-2.5 sm:py-3",
           "bg-window-header/60",
           "border-b border-border",
           "backdrop-blur-md",
@@ -184,27 +195,27 @@ export default function WindowPanel({
                 if (minimized) restoreWindow(id);
                 else minimizeWindow(id, title);
               }}
-              className="w-3 h-3 rounded-full bg-yellow-400/80 hover:bg-yellow-400 transition-colors group relative"
+              className="w-3 h-3 rounded-full bg-warning/80 hover:bg-warning transition-colors group relative"
               aria-label={minimized ? "Restore window" : "Minimize window"}
             >
-              <Minus className="w-2 h-2 absolute inset-0.5 text-yellow-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Minus className="w-2 h-2 absolute inset-0.5 text-warning-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); setIsMaximized((v) => !v); }}
-              className="w-3 h-3 rounded-full bg-green-500/80 hover:bg-green-500 transition-colors group relative"
+              className="w-3 h-3 rounded-full bg-success/80 hover:bg-success transition-colors group relative"
               aria-label={isMaximized ? "Restore window" : "Maximize window"}
             >
               {isMaximized ? (
-                <Minimize2 className="w-2 h-2 absolute inset-0.5 text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Minimize2 className="w-2 h-2 absolute inset-0.5 text-success-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               ) : (
-                <Maximize2 className="w-2 h-2 absolute inset-0.5 text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Maximize2 className="w-2 h-2 absolute inset-0.5 text-success-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               )}
             </button>
           </div>
 
           <h2
             id={`${id}-title`}
-            className={clsx("ml-3 text-sm font-mono tracking-wide sm:text-xs", accentColor)}
+            className={clsx("ml-2 sm:ml-3 text-xs font-mono tracking-wide truncate", accentColor)}
           >
             {title}
           </h2>

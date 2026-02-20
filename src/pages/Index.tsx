@@ -43,7 +43,7 @@ export default function Index() {
 
         <HeroSection />
 
-        <main className="relative z-10 mx-auto max-w-5xl space-y-16 px-4 pb-32 sm:px-6 -mt-16">
+        <main className="relative z-10 mx-auto max-w-5xl space-y-10 sm:space-y-16 px-3 sm:px-6 pb-24 sm:pb-32 -mt-16">
           <AboutSection />
           <WorkWithMeSection />
           <ProjectsSection />

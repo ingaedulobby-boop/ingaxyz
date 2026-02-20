@@ -49,16 +49,30 @@
     /* Custom tokens */
     --glow-primary: 185 70% 40%;
     --glow-accent: 280 55% 55%;
+    --glow-success: 155 70% 40%;
+    --glow-warning: 38 95% 55%;
+    --glow-info: 210 90% 55%;
     --window-bg: 0 0% 100%;
     --window-border: 220 15% 85%;
     --window-header: 220 15% 95%;
     --taskbar: 220 20% 97%;
     --dot-grid: 220 15% 88%;
+    --success: 155 70% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 95% 55%;
+    --warning-foreground: 30 100% 10%;
+    --info: 210 90% 55%;
+    --info-foreground: 0 0% 100%;
+    --cyan: 185 80% 45%;
+    --violet: 280 60% 55%;
+    --emerald: 155 75% 40%;
+    --amber: 38 95% 55%;
+    --rose: 350 75% 55%;
     --font-serif: Lora, ui-serif, Georgia, Cambria, Times New Roman, Times, serif;
-    --shadow-sm: 0px 1px 1.5px 0px hsla(81, 88%, 80%, 0.24);
-    --shadow: 0px 1px 3px 0px hsla(81, 88%, 80%, 0.24);
-    --shadow-md: 0px 1px 4.5px 0px hsla(81, 88%, 80%, 0.24);
-    --shadow-lg: 0px 1px 7.5px 0px hsla(81, 88%, 80%, 0.24);
+    --shadow-sm: 0px 1px 1.5px 0px hsla(225, 15%, 10%, 0.06);
+    --shadow: 0px 2px 6px 0px hsla(225, 15%, 10%, 0.08);
+    --shadow-md: 0px 4px 12px 0px hsla(225, 15%, 10%, 0.1);
+    --shadow-lg: 0px 8px 24px 0px hsla(225, 15%, 10%, 0.12);
   }
 
   .dark {
@@ -102,16 +116,30 @@
     /* Custom tokens */
     --glow-primary: 185 70% 50%;
     --glow-accent: 280 60% 65%;
+    --glow-success: 155 65% 50%;
+    --glow-warning: 38 90% 60%;
+    --glow-info: 210 85% 60%;
     --window-bg: 225 20% 11%;
     --window-border: 225 15% 22%;
     --window-header: 225 20% 14%;
     --taskbar: 225 25% 6%;
     --dot-grid: 225 15% 15%;
+    --success: 155 65% 50%;
+    --success-foreground: 225 25% 8%;
+    --warning: 38 90% 60%;
+    --warning-foreground: 30 100% 8%;
+    --info: 210 85% 60%;
+    --info-foreground: 225 25% 8%;
+    --cyan: 185 80% 55%;
+    --violet: 280 65% 65%;
+    --emerald: 155 70% 50%;
+    --amber: 38 90% 60%;
+    --rose: 350 70% 60%;
     --font-serif: Lora, ui-serif, Georgia, Cambria, Times New Roman, Times, serif;
-    --shadow-sm: 0px 1px 1.5px 0px hsla(81, 88%, 80%, 0.24);
-    --shadow: 0px 1px 3px 0px hsla(81, 88%, 80%, 0.24);
-    --shadow-md: 0px 1px 4.5px 0px hsla(81, 88%, 80%, 0.24);
-    --shadow-lg: 0px 1px 7.5px 0px hsla(81, 88%, 80%, 0.24);
+    --shadow-sm: 0px 1px 2px 0px hsla(225, 25%, 0%, 0.3);
+    --shadow: 0px 2px 6px 0px hsla(225, 25%, 0%, 0.4);
+    --shadow-md: 0px 4px 14px 0px hsla(225, 25%, 0%, 0.5);
+    --shadow-lg: 0px 8px 30px 0px hsla(225, 25%, 0%, 0.6);
   }
 }
 
@@ -146,8 +174,35 @@
   .glow-accent {
     box-shadow: 0 0 30px -5px hsl(var(--glow-accent) / 0.3);
   }
+  .glow-success {
+    box-shadow: 0 0 30px -5px hsl(var(--glow-success) / 0.3);
+  }
+  .glow-warning {
+    box-shadow: 0 0 30px -5px hsl(var(--glow-warning) / 0.3);
+  }
+  .glow-info {
+    box-shadow: 0 0 30px -5px hsl(var(--glow-info) / 0.3);
+  }
   .text-gradient {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, hsl(var(--cyan)), hsl(var(--info)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-violet {
+    background: linear-gradient(135deg, hsl(var(--violet)), hsl(var(--rose)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-emerald {
+    background: linear-gradient(135deg, hsl(var(--emerald)), hsl(var(--cyan)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -157,7 +212,13 @@
     background-size: 30px 30px;
   }
   .window-shadow {
+    box-shadow: 0 8px 40px -10px hsl(225 25% 0% / 0.15), 0 0 1px hsl(var(--window-border));
+  }
+  .dark .window-shadow {
     box-shadow: 0 8px 40px -10px hsl(225 25% 0% / 0.6), 0 0 1px hsl(var(--window-border));
+  }
+  .window-focused-blur {
+    backdrop-filter: blur(24px) saturate(1.2);
   }
   .font-mono {
     font-family: 'JetBrains Mono', monospace;

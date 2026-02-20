@@ -1,27 +1,27 @@
-import Navbar from "@/components/layout/Navbar";
-import Hero from "@/components/sections/Hero";
-import Systems from "@/components/sections/Systems";
-import Pricing from "@/components/sections/Pricing";
-import FAQ from "@/components/sections/FAQ";
-import CTA from "@/components/sections/CTA";
-import Footer from "@/components/layout/Footer";
-import ChatWidget from "@/components/layout/ChatWidget";
+import HeroSection from "@/components/sections/HeroSection";
+import AboutSection from "@/components/sections/AboutSection";
+import WorkWithMeSection from "@/components/sections/WorkWithMeSection";
+import ProjectsSection from "@/components/sections/ProjectsSection";
+import ServicesSection from "@/components/sections/ServicesSection";
+import BlogSection from "@/components/sections/BlogSection";
+import ContactSection from "@/components/sections/ContactSection";
+import Taskbar from "@/components/Taskbar";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <HeroSection />
 
-      <main>
-        <Hero />
-        <Systems />
-        <Pricing />
-        <FAQ />
-        <CTA />
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pb-32 space-y-12 -mt-12 relative z-10">
+        <AboutSection />
+        <WorkWithMeSection />
+        <ProjectsSection />
+        <ServicesSection />
+        <BlogSection />
+        <ContactSection />
       </main>
 
-      <Footer />
-      <ChatWidget />
+      <Taskbar />
 
       {/* JSON-LD */}
       <script
@@ -29,16 +29,12 @@ const Index = () => {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            name: "AI GOV",
-            applicationCategory: "BusinessApplication",
-            description: "Enterprise AI governance, compliance, and security platform. Policy-to-Production™.",
-            offers: {
-              "@type": "AggregateOffer",
-              lowPrice: "2499",
-              highPrice: "7999",
-              priceCurrency: "USD",
-            },
+            "@type": "Person",
+            name: "AI × UX Professional",
+            jobTitle: "AI Engineer & UX Designer",
+            description: "Hybrid professional bridging AI engineering and human-centered design.",
+            url: "https://portfolio.example.com",
+            knowsAbout: ["Machine Learning", "UX Design", "User Research", "AI Engineering"],
           }),
         }}
       />

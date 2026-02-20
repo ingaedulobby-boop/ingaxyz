@@ -24,7 +24,7 @@ const posts = [
 
 const BlogSection = () => {
   return (
-    <WindowPanel title="blog/" id="blog" accent="accent">
+    <WindowPanel title="blog/" id="blog" accent="accent" draggable>
       <h2 className="text-2xl md:text-3xl font-bold mb-2">
         Latest <span className="text-gradient">Thoughts</span>
       </h2>

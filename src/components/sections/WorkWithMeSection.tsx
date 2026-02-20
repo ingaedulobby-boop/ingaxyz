@@ -23,7 +23,7 @@ const modes = [
 
 const WorkWithMeSection = () => {
   return (
-    <WindowPanel title="collaboration.yml" id="work-with-me">
+    <WindowPanel title="collaboration.yml" id="work-with-me" draggable>
       <h2 className="text-2xl md:text-3xl font-bold mb-2">
         Work <span className="text-gradient">With Me</span>
       </h2>

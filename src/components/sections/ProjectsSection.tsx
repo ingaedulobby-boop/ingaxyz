@@ -6,7 +6,7 @@ import { projects } from "@/data/projects";
 
 const ProjectsSection = () => {
   return (
-    <WindowPanel title="~/projects" id="projects">
+    <WindowPanel title="~/projects" id="projects" draggable>
       <h2 className="text-2xl md:text-3xl font-bold mb-2">
         Case <span className="text-gradient">Studies</span>
       </h2>

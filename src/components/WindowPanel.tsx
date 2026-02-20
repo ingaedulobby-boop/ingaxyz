@@ -1,7 +1,11 @@
-import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from "framer-motion";
 import React, { ReactNode, useState, useRef, useCallback } from "react";
 import clsx from "clsx";
 import { Minus, Maximize2, Minimize2, X } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+const GRID_SIZE = 16; // snap grid in px
+const snapToGrid = (value: number) => Math.round(value / GRID_SIZE) * GRID_SIZE;
 
 export type WindowAccent = "primary" | "accent";
 
@@ -25,10 +29,32 @@ export default function WindowPanel({
   defaultPosition,
 }: WindowPanelProps) {
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
+  const [isSnapping, setIsSnapping] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Snap position values for grid snapping on drag end
+  const snapX = useMotionValue(0);
+  const snapY = useMotionValue(0);
+  const springX = useSpring(snapX, { stiffness: 300, damping: 25 });
+  const springY = useSpring(snapY, { stiffness: 300, damping: 25 });
+
+  const canDrag = draggable && !isMaximized && !isMobile;
+
+  const handleDragEnd = useCallback(
+    (_: any, info: { offset: { x: number; y: number } }) => {
+      const snappedX = snapToGrid(snapX.get() + info.offset.x);
+      const snappedY = snapToGrid(snapY.get() + info.offset.y);
+      setIsSnapping(true);
+      snapX.set(snappedX);
+      snapY.set(snappedY);
+      setTimeout(() => setIsSnapping(false), 300);
+    },
+    [snapX, snapY]
+  );
 
   // Mouse-based 3D tilt
   const rotateX = useMotionValue(0);
@@ -64,9 +90,11 @@ export default function WindowPanel({
       id={id}
       role="region"
       aria-labelledby={`${id}-title`}
-      drag={draggable && !isMaximized}
+      drag={canDrag}
       dragMomentum={false}
       dragElastic={0.05}
+      dragSnapToOrigin={false}
+      onDragEnd={canDrag ? handleDragEnd : undefined}
       initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
       whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -78,6 +106,8 @@ export default function WindowPanel({
         perspective: 1200,
         rotateX: prefersReducedMotion ? 0 : springRotateX,
         rotateY: prefersReducedMotion ? 0 : springRotateY,
+        x: canDrag ? springX : undefined,
+        y: canDrag ? springY : undefined,
       }}
       className={clsx(
         "relative w-full",
@@ -110,7 +140,7 @@ export default function WindowPanel({
           "bg-window-header/60",
           "border-b border-border",
           "backdrop-blur-md",
-          draggable && "cursor-grab active:cursor-grabbing"
+          canDrag && "cursor-grab active:cursor-grabbing"
         )}
       >
         <div className="flex items-center gap-2">

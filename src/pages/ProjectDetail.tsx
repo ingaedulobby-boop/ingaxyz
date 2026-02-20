@@ -2,14 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/data/projects";
-import projectHealthImg from "@/assets/project-health.jpg";
-import projectDocumentImg from "@/assets/project-document.jpg";
-import projectAccessibilityImg from "@/assets/project-accessibility.jpg";
+import AIHealthHero from "@/components/project-hero/AIHealthHero";
+import SmartParserHero from "@/components/project-hero/SmartParserHero";
+import AccessibilityHero from "@/components/project-hero/AccessibilityHero";
 
-const heroImages: Record<string, string> = {
-  "ai-health-companion": projectHealthImg,
-  "smart-document-parser": projectDocumentImg,
-  "accessibility-audit-tool": projectAccessibilityImg,
+const heroComponents: Record<string, React.ComponentType> = {
+  "ai-health-companion": AIHealthHero,
+  "smart-document-parser": SmartParserHero,
+  "accessibility-audit-tool": AccessibilityHero,
 };
 
 export default function ProjectDetail() {
@@ -29,21 +29,15 @@ export default function ProjectDetail() {
     );
   }
 
-  const heroSrc = heroImages[project.slug];
+  const HeroComponent = heroComponents[project.slug];
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero */}
-      <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
-        <motion.img
-          src={heroSrc}
-          alt={project.title}
-          className="absolute inset-0 w-full h-full object-cover"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+      {/* Animated Hero */}
+      <div className="relative">
+        {HeroComponent ? <HeroComponent /> : (
+          <div className="h-[50vh] min-h-[400px] bg-secondary" />
+        )}
 
         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 max-w-4xl mx-auto">
           <Link

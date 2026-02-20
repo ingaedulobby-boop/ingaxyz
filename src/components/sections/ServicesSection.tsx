@@ -1,5 +1,7 @@
 import WindowPanel from "@/components/WindowPanel";
 import { Cpu, PenTool, FlaskConical, Zap } from "lucide-react";
+import StaggerChildren, { staggerItem } from "@/components/StaggerChildren";
+import { motion } from "framer-motion";
 
 const services = [
   {
@@ -32,19 +34,20 @@ const ServicesSection = () => {
       </h2>
       <p className="text-muted-foreground mb-8">Tailored solutions at the intersection of AI and UX.</p>
 
-      <div className="grid sm:grid-cols-2 gap-4">
+      <StaggerChildren className="grid sm:grid-cols-2 gap-4">
         {services.map(({ icon: Icon, title, desc }) => (
-          <div
+          <motion.div
             key={title}
+            variants={staggerItem}
             className="group p-6 rounded-lg bg-secondary/30 border border-border 
                        hover:border-accent/40 hover:glow-accent transition-all duration-300"
           >
             <Icon className="w-8 h-8 text-accent mb-4 group-hover:scale-110 transition-transform" />
             <h3 className="font-mono font-bold text-lg mb-2">{title}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </StaggerChildren>
     </WindowPanel>
   );
 };

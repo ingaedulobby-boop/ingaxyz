@@ -1,5 +1,7 @@
 import WindowPanel from "@/components/WindowPanel";
 import { Brain, Palette, Search, Code, Figma, BarChart3 } from "lucide-react";
+import StaggerChildren, { staggerItem } from "@/components/StaggerChildren";
+import { motion } from "framer-motion";
 
 const skills = [
   { icon: Brain, label: "Machine Learning", desc: "TensorFlow, PyTorch, scikit-learn" },
@@ -27,15 +29,15 @@ const AboutSection = () => {
             The result? AI that isn't just smart—it's usable, delightful, and grounded in real human needs.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <StaggerChildren className="grid grid-cols-2 gap-3">
           {skills.map(({ icon: Icon, label, desc }) => (
-            <div key={label} className="p-4 rounded-lg bg-secondary/50 border border-border hover:border-primary/30 transition-colors">
+            <motion.div key={label} variants={staggerItem} className="p-4 rounded-lg bg-secondary/50 border border-border hover:border-primary/30 transition-colors">
               <Icon className="w-5 h-5 text-primary mb-2" />
               <p className="font-mono text-sm font-semibold text-foreground">{label}</p>
               <p className="text-xs text-muted-foreground mt-1">{desc}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </StaggerChildren>
       </div>
     </WindowPanel>
   );

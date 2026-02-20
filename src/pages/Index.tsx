@@ -1,4 +1,4 @@
-import Head from "next/head";
+import { Helmet } from "react-helmet-async";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import WorkWithMeSection from "@/components/sections/WorkWithMeSection";
@@ -27,12 +27,11 @@ export default function Index() {
 
   return (
     <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </Head>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
+      </Helmet>
 
       <div className="relative min-h-screen bg-background overflow-x-hidden">
         <HeroSection />

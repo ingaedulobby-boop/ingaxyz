@@ -29,22 +29,24 @@ const services = [
 const ServicesSection = () => {
   return (
     <WindowPanel title="services.config" id="services" accent="accent" draggable>
-      <h2 className="text-2xl md:text-3xl font-bold mb-2">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
         What I <span className="text-gradient">Offer</span>
       </h2>
-      <p className="text-muted-foreground mb-8">Tailored solutions at the intersection of AI and UX.</p>
+      <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">
+        Tailored solutions at the intersection of AI and UX.
+      </p>
 
-      <StaggerChildren className="grid sm:grid-cols-2 gap-4">
+      <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {services.map(({ icon: Icon, title, desc }) => (
           <motion.div
             key={title}
             variants={staggerItem}
-            className="group p-6 rounded-lg bg-secondary/30 border border-border 
-                       hover:border-accent/40 hover:glow-accent transition-all duration-300"
+            className="group p-5 sm:p-6 rounded-lg bg-secondary/30 border border-border 
+                       hover:border-accent/40 active:border-accent/50 hover:glow-accent transition-all duration-300"
           >
-            <Icon className="w-8 h-8 text-accent mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-mono font-bold text-lg mb-2">{title}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+            <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform" />
+            <h3 className="font-mono font-bold text-base sm:text-lg mb-2">{title}</h3>
+            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{desc}</p>
           </motion.div>
         ))}
       </StaggerChildren>

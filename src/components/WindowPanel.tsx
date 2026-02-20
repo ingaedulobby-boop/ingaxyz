@@ -74,13 +74,17 @@ export default function WindowPanel({
   const springRotateX = useSpring(rotateX, { stiffness: 200, damping: 20 });
   const springRotateY = useSpring(rotateY, { stiffness: 200, damping: 20 });
 
-  // Dynamic shadow based on tilt
-  const shadowX = useTransform(springRotateY, [-6, 6], [12, -12]);
-  const shadowY = useTransform(springRotateX, [-6, 6], [-12, 12]);
+  // Dynamic shadow based on tilt — shifts opposite to tilt direction
+  const shadowX = useTransform(springRotateY, [-6, 6], [14, -14]);
+  const shadowY = useTransform(springRotateX, [-6, 6], [-14, 14]);
+  const shadowBlur = useTransform(
+    [springRotateX, springRotateY],
+    ([rx, ry]: number[]) => 30 + Math.abs(rx as number) * 2 + Math.abs(ry as number) * 2
+  );
   const dynamicShadow = useTransform(
-    [shadowX, shadowY],
-    ([sx, sy]: number[]) =>
-      `${sx}px ${sy}px 40px -10px hsl(225 25% 0% / 0.18), 0 0 1px hsl(var(--window-border))`
+    [shadowX, shadowY, shadowBlur],
+    ([sx, sy, blur]: number[]) =>
+      `${sx}px ${sy}px ${blur}px -10px hsl(var(--foreground) / 0.12), 0 0 1px hsl(var(--window-border))`
   );
 
   const handleMouseMove = useCallback(
@@ -142,13 +146,13 @@ export default function WindowPanel({
         "rounded-2xl",
         "border border-border",
         "bg-card/80",
-        "transition-all duration-300",
+        "transition-[border-color,ring] duration-300",
         "will-change-transform",
         "overflow-hidden outline-none",
         // Focused: ring + blur
         isFocused && "ring-1 ring-primary/30 window-focused-blur",
         !isFocused && "backdrop-blur-xl",
-        // Only apply default shadow when not using dynamic shadow (mobile)
+        // Mobile: static shadow
         isMobile && "window-shadow",
         isMaximized && "!fixed !inset-2 sm:!inset-4 !z-50 !rounded-2xl",
         className

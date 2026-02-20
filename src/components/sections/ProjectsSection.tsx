@@ -7,12 +7,14 @@ import { projects } from "@/data/projects";
 const ProjectsSection = () => {
   return (
     <WindowPanel title="~/projects" id="projects" draggable>
-      <h2 className="text-2xl md:text-3xl font-bold mb-2">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
         Case <span className="text-gradient">Studies</span>
       </h2>
-      <p className="text-muted-foreground mb-8">Where AI meets human-centered design.</p>
+      <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">
+        Where AI meets human-centered design.
+      </p>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {projects.map((project, i) => (
           <motion.div
             key={project.slug}
@@ -23,29 +25,30 @@ const ProjectsSection = () => {
           >
             <Link
               to={`/project/${project.slug}`}
-              className="group block p-6 rounded-lg bg-secondary/30 border border-border hover:border-primary/40 transition-all duration-300"
+              className="group block p-4 sm:p-6 rounded-lg bg-secondary/30 border border-border 
+                         hover:border-primary/40 active:border-primary/50 transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <span className={`font-mono text-xs px-2 py-1 rounded ${project.color === "primary" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"}`}>
                     {project.tag}
                   </span>
-                  <h3 className="text-xl font-bold mt-2">{project.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold mt-2">{project.title}</h3>
                 </div>
-                <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
               </div>
-              <div className="grid sm:grid-cols-3 gap-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
                 <div>
                   <p className="font-mono text-xs text-primary mb-1">Problem</p>
-                  <p className="text-muted-foreground">{project.problem}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm">{project.problem}</p>
                 </div>
                 <div>
                   <p className="font-mono text-xs text-primary mb-1">Solution</p>
-                  <p className="text-muted-foreground">{project.solution}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm">{project.solution}</p>
                 </div>
                 <div>
                   <p className="font-mono text-xs text-primary mb-1">Outcome</p>
-                  <p className="text-foreground font-medium">{project.outcome}</p>
+                  <p className="text-foreground font-medium text-xs sm:text-sm">{project.outcome}</p>
                 </div>
               </div>
             </Link>

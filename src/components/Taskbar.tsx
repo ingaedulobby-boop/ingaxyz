@@ -30,15 +30,18 @@ const Taskbar = () => {
                  flex items-center gap-0.5 sm:gap-1 
                  px-2 sm:px-4 py-1.5 sm:py-2 
                  rounded-2xl glass-strong shadow-2xl
-                 max-w-[calc(100vw-1.5rem)] overflow-x-auto scrollbar-none"
+                 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)]
+                 overflow-x-auto scrollbar-none safe-bottom"
     >
       {navItems.map(({ icon: Icon, label, href }) => (
         <button
           key={label}
           onClick={() => scrollTo(href)}
           className="group relative flex flex-col items-center gap-0.5 
-                     px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl 
-                     hover:bg-secondary transition-colors duration-200
+                     min-w-[2.5rem] sm:min-w-0
+                     px-1.5 sm:px-3 py-1.5 sm:py-2 rounded-xl 
+                     hover:bg-secondary active:bg-secondary/80 
+                     transition-colors duration-200
                      flex-shrink-0"
           aria-label={label}
         >
@@ -67,7 +70,8 @@ const Taskbar = () => {
                   el?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-primary/10 text-primary 
-                           text-[10px] sm:text-xs font-mono hover:bg-primary/20 transition-colors flex-shrink-0"
+                           text-[10px] sm:text-xs font-mono hover:bg-primary/20 
+                           active:bg-primary/30 transition-colors flex-shrink-0"
                 aria-label={`Restore ${w.title}`}
               >
                 {w.title}

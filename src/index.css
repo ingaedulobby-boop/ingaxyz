@@ -46,7 +46,7 @@
     --sidebar-border: 220 15% 85%;
     --sidebar-ring: 185 70% 40%;
 
-    /* Custom tokens */
+    /* Semantic tokens */
     --glow-primary: 185 70% 40%;
     --glow-accent: 280 55% 55%;
     --glow-success: 155 70% 40%;
@@ -63,11 +63,21 @@
     --warning-foreground: 30 100% 10%;
     --info: 210 90% 55%;
     --info-foreground: 0 0% 100%;
+
+    /* Unique palette */
     --cyan: 185 80% 45%;
     --violet: 280 60% 55%;
     --emerald: 155 75% 40%;
     --amber: 38 95% 55%;
     --rose: 350 75% 55%;
+    --indigo: 240 60% 55%;
+    --teal: 170 70% 42%;
+    --coral: 16 85% 60%;
+    --gold: 45 90% 50%;
+    --sky: 200 85% 55%;
+    --fuchsia: 300 70% 55%;
+    --lime: 85 75% 45%;
+
     --font-serif: Lora, ui-serif, Georgia, Cambria, Times New Roman, Times, serif;
     --shadow-sm: 0px 1px 1.5px 0px hsla(225, 15%, 10%, 0.06);
     --shadow: 0px 2px 6px 0px hsla(225, 15%, 10%, 0.08);
@@ -113,7 +123,7 @@
     --sidebar-border: 225 15% 20%;
     --sidebar-ring: 185 70% 50%;
 
-    /* Custom tokens */
+    /* Semantic tokens */
     --glow-primary: 185 70% 50%;
     --glow-accent: 280 60% 65%;
     --glow-success: 155 65% 50%;
@@ -130,11 +140,21 @@
     --warning-foreground: 30 100% 8%;
     --info: 210 85% 60%;
     --info-foreground: 225 25% 8%;
+
+    /* Unique palette */
     --cyan: 185 80% 55%;
     --violet: 280 65% 65%;
     --emerald: 155 70% 50%;
     --amber: 38 90% 60%;
     --rose: 350 70% 60%;
+    --indigo: 240 65% 65%;
+    --teal: 170 65% 52%;
+    --coral: 16 80% 65%;
+    --gold: 45 85% 58%;
+    --sky: 200 80% 62%;
+    --fuchsia: 300 65% 65%;
+    --lime: 85 70% 55%;
+
     --font-serif: Lora, ui-serif, Georgia, Cambria, Times New Roman, Times, serif;
     --shadow-sm: 0px 1px 2px 0px hsla(225, 25%, 0%, 0.3);
     --shadow: 0px 2px 6px 0px hsla(225, 25%, 0%, 0.4);
@@ -151,6 +171,8 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'JetBrains Mono', monospace;
@@ -207,6 +229,24 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .text-gradient-coral {
+    background: linear-gradient(135deg, hsl(var(--coral)), hsl(var(--gold)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-sky {
+    background: linear-gradient(135deg, hsl(var(--sky)), hsl(var(--teal)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-fuchsia {
+    background: linear-gradient(135deg, hsl(var(--fuchsia)), hsl(var(--indigo)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
   .dot-grid {
     background-image: radial-gradient(circle, hsl(var(--dot-grid)) 1px, transparent 1px);
     background-size: 30px 30px;
@@ -222,5 +262,17 @@
   }
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
+  }
+  /* Hide scrollbar but keep scroll */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  /* Safe area padding for mobile notch/gesture bar */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }

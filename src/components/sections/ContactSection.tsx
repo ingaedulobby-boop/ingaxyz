@@ -45,13 +45,15 @@ const ContactSection = () => {
           </p>
           <div className="flex gap-3 sm:gap-4">
             {[
-              { icon: Github, href: "#", label: "GitHub" },
-              { icon: Linkedin, href: "#", label: "LinkedIn" },
-              { icon: Twitter, href: "#", label: "Twitter" },
+              { icon: Github, href: "https://github.com/ikali0", label: "GitHub" },
+              { icon: Linkedin, href: "https://www.linkedin.com/in/ik11", label: "LinkedIn" },
+              { icon: Twitter, href: "https://x.com/humynity50521", label: "Twitter" },
             ].map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
                 href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="w-11 h-11 sm:w-10 sm:h-10 rounded-lg bg-secondary/50 border border-border flex items-center justify-center 
                            hover:border-primary hover:text-primary active:bg-primary/10 transition-all"

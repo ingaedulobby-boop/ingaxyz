@@ -58,7 +58,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 0.6 }}
-          className="flex flex-wrap justify-center items-center\ngap-2 sm:gap-3 md:gap-4\npx-3\nw-full\n[transform:translateZ(0)]\nwill-change-transform">
+          className=" flex flex-wrap justify-center items-center\n  gap-2 sm:gap-3 md:gap-4\n  px-3\n  w-full\n  [transform:translateZ(0)]\n  will-change-transform">
 
           <a
             href="#projects"

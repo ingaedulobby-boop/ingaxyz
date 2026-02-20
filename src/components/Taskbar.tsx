@@ -23,7 +23,7 @@ const Taskbar = () => {
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 glass flex items-start justify-center px-[6px] py-[6px] gap-[2px] rounded-sm">
+      className="flex-shrink">
 
       {navItems.map(({ icon: Icon, label, href }) =>
       <button
@@ -34,7 +34,7 @@ const Taskbar = () => {
         aria-label={label}>
 
           <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-          <span className="text-[10px] text-muted-foreground group-hover:text-foreground font-mono transition-colors hidden sm:block">
+          <span className="transition-colors hidden sm:block text-center font-serif text-xs bg-accent text-destructive-foreground">
             {label}
           </span>
         </button>

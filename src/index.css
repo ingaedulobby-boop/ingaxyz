@@ -4,6 +4,56 @@
 
 @layer base {
   :root {
+    --background: 220 20% 96%;
+    --foreground: 225 25% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 225 25% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 25% 12%;
+
+    --primary: 185 70% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 90%;
+    --secondary-foreground: 225 20% 20%;
+
+    --muted: 220 15% 92%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 280 55% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 15% 85%;
+    --input: 220 15% 85%;
+    --ring: 185 70% 40%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 20% 94%;
+    --sidebar-foreground: 225 20% 20%;
+    --sidebar-primary: 185 70% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 90%;
+    --sidebar-accent-foreground: 225 20% 20%;
+    --sidebar-border: 220 15% 85%;
+    --sidebar-ring: 185 70% 40%;
+
+    /* Custom tokens */
+    --glow-primary: 185 70% 40%;
+    --glow-accent: 280 55% 55%;
+    --window-bg: 0 0% 100%;
+    --window-border: 220 15% 85%;
+    --window-header: 220 15% 95%;
+    --taskbar: 220 20% 97%;
+    --dot-grid: 220 15% 88%;
+  }
+
+  .dark {
     --background: 225 25% 8%;
     --foreground: 210 20% 90%;
 
@@ -32,8 +82,6 @@
     --input: 225 15% 20%;
     --ring: 185 70% 50%;
 
-    --radius: 0.75rem;
-
     --sidebar-background: 225 20% 10%;
     --sidebar-foreground: 210 20% 85%;
     --sidebar-primary: 185 70% 50%;
@@ -61,6 +109,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'JetBrains Mono', monospace;

@@ -15,7 +15,7 @@ export default function AIChatButton({ isOpen, onClick, hasUnread }: AIChatButto
       transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
       onClick={onClick}
       aria-label={isOpen ? "Close AI chat" : "Open AI chat"}
-      className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] right-3 z-[61] h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center"
+      className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] right-3 z-[51] h-10 w-10 sm:h-11 sm:w-9 rounded-full snprimary text-primary-foreground flex items-center justify-center-"
       style={{
         boxShadow: "0 4px 14px -3px hsl(var(--primary) / 0.4), 0 2px 6px -2px hsl(var(--foreground) / 0.1), inset 0 1px 1px hsl(var(--primary-foreground) / 0.15)",
         transformStyle: "preserve-3d",

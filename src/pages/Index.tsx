@@ -11,6 +11,27 @@ import Taskbar from "@/components/Taskbar";
 import AIChatButton from "@/components/AIChatButton";
 import AIChatWindow from "@/components/AIChatWindow";
 
+const SITE_URL = "https://ingaxyz.lovable.app";
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Inga Kaltak",
+  jobTitle: "AI Engineer & UX Designer",
+  description: "Hybrid professional bridging AI engineering and human-centered design.",
+  url: SITE_URL,
+  sameAs: [],
+  knowsAbout: ["Machine Learning", "UX Design", "User Research", "AI Engineering", "Accessibility"],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Inga Kaltak — AI × UX Portfolio",
+  url: SITE_URL,
+  description: "AI Engineer, UX Designer & Researcher portfolio showcasing projects at the intersection of AI and human-centered design.",
+};
+
 export default function Index() {
   const [chatOpen, setChatOpen] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
@@ -25,28 +46,27 @@ export default function Index() {
   const handleNewMessage = useCallback(() => {
     if (!chatOpen) setHasUnread(true);
   }, [chatOpen]);
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "AI × UX Professional",
-    jobTitle: "AI Engineer & UX Designer",
-    description:
-      "Hybrid professional bridging AI engineering and human-centered design.",
-    url: "https://portfolio.example.com",
-    knowsAbout: [
-      "Machine Learning",
-      "UX Design",
-      "User Research",
-      "AI Engineering",
-    ],
-  };
 
   return (
     <>
       <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
+        <title>Inga Kaltak — AI Engineer × UX Designer × Researcher</title>
+        <meta name="description" content="Building AI solutions people love to use. Bridging cutting-edge machine learning with human-centered design." />
+        <link rel="canonical" href={SITE_URL} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:title" content="Inga Kaltak — AI Engineer × UX Designer" />
+        <meta property="og:description" content="Bridging cutting-edge AI with human-centered design." />
+        <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Inga Kaltak — AI Engineer × UX Designer" />
+        <meta name="twitter:description" content="AI solutions people love to use." />
+        <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
+
+        <script type="application/ld+json">{JSON.stringify(personJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
       </Helmet>
 
       <div className="relative min-h-screen bg-background overflow-x-hidden">

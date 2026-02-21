@@ -145,7 +145,10 @@ export default function AccessibilityHero() {
             {wcagChecks.map((c, i) => (
               <motion.div
                 key={c.label}
-                className="group relative px-3 py-2 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/10 transition-colors cursor-default"
+                tabIndex={0}
+                role="button"
+                aria-expanded={false}
+                className="group relative px-3 py-2 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/10 focus-within:bg-white/[0.06] focus-within:border-white/10 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-colors cursor-default"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: prefersReduced ? 0 : 0.3 + i * 0.08, duration: 0.5 }}
@@ -159,7 +162,7 @@ export default function AccessibilityHero() {
                     {c.status}
                   </span>
                 </div>
-                <div className="max-h-0 overflow-hidden opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300 ease-out">
+                <div className="max-h-0 overflow-hidden opacity-0 group-hover:max-h-12 group-hover:opacity-100 group-focus-within:max-h-12 group-focus-within:opacity-100 transition-all duration-300 ease-out">
                   <p className={`text-[10px] font-mono mt-1.5 ${c.pass ? "text-slate-400" : "text-amber-300/70"}`}>
                     💡 {c.fix}
                   </p>

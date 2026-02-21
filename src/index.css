@@ -149,13 +149,15 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Nunito', system-ui, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+    /* Fluid base size: 16px at 375px → 18px at 1200px */
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   }
 
   #root {
@@ -175,6 +177,26 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Fluid heading scale */
+  h1 { font-size: clamp(2rem, 1.5rem + 2.5vw, 4.5rem); }
+  h2 { font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem); }
+  h3 { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); }
+
+  /* Enforce min tap targets on mobile */
+  @media (pointer: coarse) {
+    button, a, [role="button"], input, select, textarea {
+      min-height: 44px;
+    }
+  }
+
+  /* Reduce heavy animations on mobile */
+  @media (max-width: 640px), (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.3s !important;
+      transition-duration: 0.2s !important;
+    }
   }
 }
 
@@ -237,5 +259,9 @@
   /* Safe area padding for mobile notch/gesture bar */
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  /* Mobile-first spacing scale: 16px → 24px → 48px */
+  .section-px {
+    @apply px-4 sm:px-6 lg:px-12;
   }
 }

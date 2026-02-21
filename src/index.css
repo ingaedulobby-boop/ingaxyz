@@ -171,16 +171,44 @@
 }
 
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     @apply border-border;
+    box-sizing: border-box;
   }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
   }
+
+  #root {
+    width: 100%;
+    min-height: 100svh;
+    padding: env(safe-area-inset-top)
+             env(safe-area-inset-right)
+             env(safe-area-inset-bottom)
+             env(safe-area-inset-left);
+  }
+
+  img, video, canvas, svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'JetBrains Mono', monospace;
   }

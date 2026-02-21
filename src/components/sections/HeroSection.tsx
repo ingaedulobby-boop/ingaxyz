@@ -61,7 +61,7 @@ const HeroSection = () => {
         </div>
 
         {/* Headline */}
-        <h1 className="relative font-mono font-bold leading-tight mb-6 min-h-[2.4em] text-[clamp(2rem,5vw,4.5rem)]">
+        <h1 className="relative font-mono font-bold leading-tight mb-6 min-h-[2.4em] text-5xl">
           <span aria-live="polite" aria-atomic="true">
             {displayed}
             {!done && <span className="inline-block w-[3px] h-[1em] bg-primary ml-1 animate-pulse align-middle" />}

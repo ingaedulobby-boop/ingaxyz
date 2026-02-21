@@ -35,12 +35,12 @@ const HeroSection = () => {
   // Parallax ranges:
   // - Desktop: stronger movement
   // - Mobile: subtle or disabled movement
-  const bgY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion || isMobile ? ["0%", "0%"] : ["0%", "30%"]);
+  const bgY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? ["0%", "0%"] : isMobile ? ["0%", "10%"] : ["0%", "30%"]);
 
   const contentY = useTransform(
     scrollYProgress,
     [0, 1],
-    prefersReducedMotion || isMobile ? ["0%", "0%"] : ["0%", "15%"],
+    prefersReducedMotion ? ["0%", "0%"] : isMobile ? ["0%", "5%"] : ["0%", "15%"],
   );
 
   const opacity = useTransform(scrollYProgress, [0, 0.8], prefersReducedMotion ? [1, 1] : [1, 0]);

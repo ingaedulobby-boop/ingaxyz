@@ -84,8 +84,8 @@ function ServiceCard({
 
         {/* Front */}
         <div
-          className="absolute inset-0 backface-hidden p-5 sm:p-6 rounded-xl bg-card/60 border border-border 
-                     hover:border-primary/30 hover:shadow-[0_4px_20px_-4px_hsl(var(--primary)/0.15)] transition-all duration-300 flex flex-col"
+          className="absolute inset-0 backface-hidden p-5 sm:p-6 bg-card/60 border border-border hover:border-primary/30 hover:shadow-[0_4px_20px_-4px_hsl(var(--primary)/0.15)] transition-all duration-300 flex flex-col rounded-sm"
+
           style={{ backfaceVisibility: "hidden" }}>
 
           {/* Icon badge */}

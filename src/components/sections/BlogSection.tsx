@@ -11,6 +11,7 @@ interface SubstackPost {
   pubDate: string;
   excerpt: string;
   categories: string[];
+  thumbnail: string | null;
 }
 
 const fallbackPosts: SubstackPost[] = [
@@ -20,6 +21,7 @@ const fallbackPosts: SubstackPost[] = [
     excerpt: "The gap between a technically impressive model and a product people actually use is bridged by research.",
     categories: ["UX + AI"],
     link: "https://ingakali.substack.com",
+    thumbnail: null,
   },
   {
     pubDate: "2026-01-28",
@@ -27,6 +29,7 @@ const fallbackPosts: SubstackPost[] = [
     excerpt: "Users don't trust black boxes. Here's how design choices can make AI feel transparent and reliable.",
     categories: ["Design"],
     link: "https://ingakali.substack.com",
+    thumbnail: null,
   },
   {
     pubDate: "2026-01-10",
@@ -34,6 +37,7 @@ const fallbackPosts: SubstackPost[] = [
     excerpt: "A practical checklist for ensuring your ML pipeline outputs feed into delightful user experiences.",
     categories: ["Engineering"],
     link: "https://ingakali.substack.com",
+    thumbnail: null,
   },
 ];
 
@@ -80,13 +84,16 @@ const BlogSection = () => {
       <div className="space-y-3 sm:space-y-4">
         {isLoading
           ? Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="p-3 sm:p-4 space-y-2">
-                <div className="flex gap-2">
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-4 w-14" />
+              <div key={i} className="flex gap-3 sm:gap-4 p-3 sm:p-4">
+                <Skeleton className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="flex gap-2">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-4 w-14" />
+                  </div>
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
                 </div>
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-4 w-full" />
               </div>
             ))
           : posts.map((post) => (
@@ -96,8 +103,16 @@ const BlogSection = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg 
-                           hover:bg-secondary/40 active:bg-secondary/50 transition-colors cursor-pointer block"
+                           hover:bg-secondary/40 active:bg-secondary/50 transition-colors cursor-pointer"
               >
+                {post.thumbnail && (
+                  <img
+                    src={post.thumbnail}
+                    alt=""
+                    loading="lazy"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover flex-shrink-0 bg-muted"
+                  />
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
                     <span className="font-mono text-[10px] sm:text-xs text-muted-foreground">

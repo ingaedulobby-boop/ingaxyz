@@ -171,7 +171,7 @@ const Taskbar = () => {
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 gap-1 py-2 glass-strong rounded-2xl flex items-center justify-center shadow-lg px-[10px]"
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 gap-1 py-2 glass-strong shadow-lg px-[10px] flex items-start justify-start rounded-sm"
 
       aria-label="Main navigation">
 

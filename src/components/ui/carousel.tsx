@@ -19,6 +19,7 @@ type CarouselProps = {
   orientation?: "horizontal" | "vertical";
   setApi?: (api: CarouselApi) => void;
   autoplay?: boolean;
+  centerMode?: boolean;
 };
 
 type CarouselContextProps = {
@@ -33,6 +34,8 @@ type CarouselContextProps = {
   scrollSnaps: number[];
   progress: number;
   scrollTo: (index: number) => void;
+  slideStyles: Array<{ scale: number; parallaxX: number }>;
+  centerMode: boolean;
 };
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
@@ -56,6 +59,7 @@ const Carousel = React.forwardRef<
       plugins: externalPlugins,
       setApi,
       autoplay = false,
+      centerMode = false,
       className,
       children,
       ...props
@@ -85,6 +89,38 @@ const Carousel = React.forwardRef<
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
     const [progress, setProgress] = React.useState(0);
+    const [slideStyles, setSlideStyles] = React.useState<
+      Array<{ scale: number; parallaxX: number }>
+    >([]);
+
+    const computeSlideStyles = React.useCallback(
+      (api: CarouselApi) => {
+        if (!api || !centerMode) return;
+        const engine = (api as any).internalEngine();
+        const scrollProgress = api.scrollProgress();
+        const styles = api.scrollSnapList().map((snapPosition, index) => {
+          let diffToTarget = snapPosition - scrollProgress;
+
+          // Handle loop wrapping
+          engine.slideLooper?.loopPoints?.forEach((loopItem: any) => {
+            if (loopItem.index === index) {
+              const target = loopItem.target();
+              if (Math.abs(target) > 0) {
+                diffToTarget = snapPosition + target - scrollProgress;
+              }
+            }
+          });
+
+          const distance = Math.abs(diffToTarget);
+          const scale = Math.max(0.85, 1 - distance * 0.3);
+          const parallaxX = diffToTarget * -50;
+
+          return { scale, parallaxX };
+        });
+        setSlideStyles(styles);
+      },
+      [centerMode],
+    );
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) return;
@@ -93,10 +129,14 @@ const Carousel = React.forwardRef<
       setSelectedIndex(api.selectedScrollSnap());
     }, []);
 
-    const onScroll = React.useCallback((api: CarouselApi) => {
-      if (!api) return;
-      setProgress(Math.max(0, Math.min(1, api.scrollProgress())));
-    }, []);
+    const onScroll = React.useCallback(
+      (api: CarouselApi) => {
+        if (!api) return;
+        setProgress(Math.max(0, Math.min(1, api.scrollProgress())));
+        computeSlideStyles(api);
+      },
+      [computeSlideStyles],
+    );
 
     const scrollPrev = React.useCallback(() => api?.scrollPrev(), [api]);
     const scrollNext = React.useCallback(() => api?.scrollNext(), [api]);
@@ -139,6 +179,7 @@ const Carousel = React.forwardRef<
       setScrollSnaps(api.scrollSnapList());
       onSelect(api);
       onScroll(api);
+      computeSlideStyles(api);
 
       api.on("reInit", onSelect);
       api.on("select", onSelect);
@@ -151,7 +192,7 @@ const Carousel = React.forwardRef<
         api.off("scroll", onScroll);
         api.off("reInit", onScroll);
       };
-    }, [api, onSelect, onScroll]);
+    }, [api, onSelect, onScroll, computeSlideStyles]);
 
     return (
       <CarouselContext.Provider
@@ -167,6 +208,8 @@ const Carousel = React.forwardRef<
           scrollSnaps,
           progress,
           scrollTo,
+          slideStyles,
+          centerMode,
         }}
       >
         <div
@@ -209,9 +252,30 @@ CarouselContent.displayName = "CarouselContent";
 
 const CarouselItem = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const { orientation } = useCarousel();
+  React.HTMLAttributes<HTMLDivElement> & { index?: number }
+>(({ className, index, style, children, ...props }, ref) => {
+  const { orientation, slideStyles, centerMode } = useCarousel();
+
+  const itemStyle = React.useMemo(() => {
+    if (!centerMode || index === undefined || !slideStyles[index]) {
+      return style;
+    }
+    const { scale } = slideStyles[index];
+    return {
+      ...style,
+      transform: `scale(${scale})`,
+      transition: "transform 0.25s ease-out",
+    };
+  }, [centerMode, index, slideStyles, style]);
+
+  const parallaxStyle = React.useMemo(() => {
+    if (!centerMode || index === undefined || !slideStyles[index]) return {};
+    const { parallaxX } = slideStyles[index];
+    return {
+      transform: `translateX(${parallaxX}px)`,
+      transition: "transform 0.25s ease-out",
+    };
+  }, [centerMode, index, slideStyles]);
 
   return (
     <div
@@ -219,12 +283,22 @@ const CarouselItem = React.forwardRef<
       role="group"
       aria-roledescription="slide"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full transition-transform transform-gpu hover:scale-[1.02]",
+        "min-w-0 shrink-0 grow-0 basis-full transform-gpu",
+        !centerMode && "transition-transform hover:scale-[1.02]",
         orientation === "horizontal" ? "pl-4" : "pt-4",
         className,
       )}
+      style={itemStyle}
       {...props}
-    />
+    >
+      {centerMode ? (
+        <div className="overflow-hidden">
+          <div style={parallaxStyle}>{children}</div>
+        </div>
+      ) : (
+        children
+      )}
+    </div>
   );
 });
 CarouselItem.displayName = "CarouselItem";

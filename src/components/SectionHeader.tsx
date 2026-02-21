@@ -15,11 +15,21 @@ export default function SectionHeader({ title, subtitle, className }: SectionHea
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, amount: 0.6 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="text-1xl sm:text-2xl md:text-2xl font-bold leading-tight"
-      >
+        className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
+
         {title}
       </motion.h2>
-      {subtitle}
-    </div>
-  );
+      {subtitle
+
+
+
+
+
+
+
+
+
+      }
+    </div>);
+
 }

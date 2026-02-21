@@ -52,7 +52,7 @@ const HeroSection = () => {
 
         {/* Role Badge */}
         <div className="mb-8 flex justify-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 border border-white/20 bg-white/10 backdrop-blur-md rounded-sm py-[4px] px-[6px]">
             <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
             <span className="text-xs tracking-widest uppercase font-mono text-white/80">
               AI Engineer · UX Designer · Researcher

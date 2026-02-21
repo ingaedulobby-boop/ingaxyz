@@ -37,7 +37,7 @@ const ContactSection = () => {
     <WindowPanel title="contact.sh" id="contact">
       <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         <div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5 leading-tight">
             Let's <span className="text-gradient">Connect</span>
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-base">

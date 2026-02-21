@@ -74,7 +74,7 @@ const BlogSection = () => {
 
   return (
     <WindowPanel title="blog/" id="blog" accent="accent" draggable>
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
         Latest <span className="text-gradient">Thoughts</span>
       </h2>
       <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">

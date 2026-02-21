@@ -98,9 +98,9 @@ function NeuralNetworkSVG() {
 }
 
 const files = [
-  { name: "Invoice #4821", type: "PDF" },
-  { name: "Contract_v2.pdf", type: "PDF" },
-  { name: "Report_Q4.docx", type: "DOCX" },
+  { name: "Invoice #4821", type: "PDF", pages: 3, size: "1.2 MB", extracted: "12 fields" },
+  { name: "Contract_v2.pdf", type: "PDF", pages: 18, size: "4.7 MB", extracted: "34 fields" },
+  { name: "Report_Q4.docx", type: "DOCX", pages: 9, size: "2.1 MB", extracted: "21 fields" },
 ];
 
 const heatmapFields = [
@@ -193,7 +193,9 @@ export default function SmartParserHero() {
             {files.map((f, i) => (
               <motion.div
                 key={f.name}
-                className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
+                tabIndex={0}
+                role="button"
+                className={`group relative flex flex-col px-3 py-2.5 rounded-lg border cursor-pointer transition-colors focus:ring-1 focus:ring-cyan-400/40 focus:outline-none focus-within:border-cyan-400/40 focus-within:bg-white/5 ${
                   hoveredFile === i
                     ? "border-cyan-400/40 bg-white/5"
                     : "border-white/5 bg-white/[0.02]"
@@ -204,15 +206,27 @@ export default function SmartParserHero() {
                 onHoverStart={() => setHoveredFile(i)}
                 onHoverEnd={() => setHoveredFile(null)}
               >
-                {hoveredFile === i && (
-                  <motion.div
-                    layoutId="file-highlight"
-                    className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full bg-cyan-400"
-                  />
-                )}
-                <div className="w-2 h-2 rounded-full bg-cyan-400/60" />
-                <span className="text-xs sm:text-sm font-mono text-slate-200">{f.name}</span>
-                <span className="ml-auto text-[10px] font-mono text-slate-500">{f.type}</span>
+                <div className="flex items-center gap-3">
+                  {hoveredFile === i && (
+                    <motion.div
+                      layoutId="file-highlight"
+                      className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full bg-cyan-400"
+                    />
+                  )}
+                  <div className="w-2 h-2 rounded-full bg-cyan-400/60" />
+                  <span className="text-xs sm:text-sm font-mono text-slate-200">{f.name}</span>
+                  <span className="ml-auto text-[10px] font-mono text-slate-500">{f.type}</span>
+                </div>
+                {/* Expandable metadata row */}
+                <div className="max-h-0 group-hover:max-h-12 group-focus-within:max-h-12 overflow-hidden transition-all duration-300 ease-in-out">
+                  <div className="flex gap-3 pt-1.5 pl-5 text-[10px] font-mono text-slate-400">
+                    <span>{f.pages} pages</span>
+                    <span>·</span>
+                    <span>{f.size}</span>
+                    <span>·</span>
+                    <span className="text-cyan-400/70">{f.extracted}</span>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>

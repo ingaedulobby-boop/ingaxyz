@@ -185,13 +185,15 @@ export default function WindowPanel({
       >
         <div className="flex items-center gap-2">
           {/* Window control dots */}
-          <div className="flex gap-1.5">
+          <div className="flex -m-1.5">
             <button
               onClick={(e) => { e.stopPropagation(); setIsClosed(true); }}
-              className="w-3 h-3 rounded-full bg-destructive/80 hover:bg-destructive transition-colors group relative"
+              className="w-6 h-6 flex items-center justify-center group relative"
               aria-label="Close window"
             >
-              <X className="w-2 h-2 absolute inset-0.5 text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="w-3 h-3 rounded-full bg-destructive/80 group-hover:bg-destructive transition-colors relative">
+                <X className="w-2 h-2 absolute inset-0.5 text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </span>
             </button>
             <button
               onClick={(e) => {
@@ -199,21 +201,25 @@ export default function WindowPanel({
                 if (minimized) restoreWindow(id);
                 else minimizeWindow(id, title);
               }}
-              className="w-3 h-3 rounded-full bg-warning/80 hover:bg-warning transition-colors group relative"
+              className="w-6 h-6 flex items-center justify-center group relative"
               aria-label={minimized ? "Restore window" : "Minimize window"}
             >
-              <Minus className="w-2 h-2 absolute inset-0.5 text-warning-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="w-3 h-3 rounded-full bg-warning/80 group-hover:bg-warning transition-colors relative">
+                <Minus className="w-2 h-2 absolute inset-0.5 text-warning-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </span>
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); setIsMaximized((v) => !v); }}
-              className="w-3 h-3 rounded-full bg-success/80 hover:bg-success transition-colors group relative"
+              className="w-6 h-6 flex items-center justify-center group relative"
               aria-label={isMaximized ? "Restore window" : "Maximize window"}
             >
-              {isMaximized ? (
-                <Minimize2 className="w-2 h-2 absolute inset-0.5 text-success-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              ) : (
-                <Maximize2 className="w-2 h-2 absolute inset-0.5 text-success-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              )}
+              <span className="w-3 h-3 rounded-full bg-success/80 group-hover:bg-success transition-colors relative">
+                {isMaximized ? (
+                  <Minimize2 className="w-2 h-2 absolute inset-0.5 text-success-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                ) : (
+                  <Maximize2 className="w-2 h-2 absolute inset-0.5 text-success-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                )}
+              </span>
             </button>
           </div>
 

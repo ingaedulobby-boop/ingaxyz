@@ -42,9 +42,12 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const ip_address = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('cf-connecting-ip') || null;
+    const user_agent = req.headers.get('user-agent') || null;
+
     const { error: dbError } = await supabase
       .from('contact_submissions')
-      .insert({ name: name.trim(), email: email.trim(), message: message.trim() });
+      .insert({ name: name.trim(), email: email.trim(), message: message.trim(), ip_address, user_agent });
 
     if (dbError) {
       console.error('Database error:', dbError);

@@ -73,7 +73,7 @@ const HeroSection = () => {
 
       {/* Content wrapper */}
       <motion.div
-        className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto"
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto sm:px-[22px]"
         style={prefersReducedMotion ? {} : { y: contentY, opacity }}>
 
         <div>

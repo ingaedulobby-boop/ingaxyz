@@ -72,7 +72,7 @@ const ProjectsSection = () => {
               </div>
 
               {/* Content */}
-              <div className="p-4 sm:p-5">
+              <div className="p-3 sm:p-5 px-[12px] py-[11px]">
                 <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{project.solution}</p>
                 
                 {/* Metric chips */}

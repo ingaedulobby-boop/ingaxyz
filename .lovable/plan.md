@@ -1,33 +1,47 @@
 
 
-# Add Subtle Mobile Parallax
+# Upgrade Carousel with Autoplay, Dots, Progress Bar, and 3D Hover
 
 ## Summary
-Enable a gentle parallax effect on mobile devices instead of fully disabling it. This applies to both the hero section and the shared `useParallax` hook used by project hero components.
+Enhance the existing shadcn carousel component with autoplay, dot indicators, a scroll progress bar, responsive slide counts (1 on mobile / 3 on desktop), and a subtle 3D hover effect on slides. The carousel is not currently used by any other component, so this is a safe, zero-breaking-change upgrade.
 
 ## Changes
 
-### 1. `src/components/sections/HeroSection.tsx` (lines 35-44)
+### 1. Install `embla-carousel-autoplay`
+Add the autoplay plugin dependency.
 
-Update the parallax transform ranges to use reduced values on mobile instead of zero:
+### 2. Rewrite `src/components/ui/carousel.tsx`
+Replace the current carousel with an upgraded version that keeps the existing composable API (Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext) and adds:
 
-- **`bgY`**: Change mobile range from `["0%", "0%"]` to `["0%", "10%"]`
-- **`contentY`**: Change mobile range from `["0%", "0%"]` to `["0%", "5%"]`
-- `prefersReducedMotion` still fully disables parallax (accessibility preserved)
+**New features:**
+- **Autoplay**: 4-second delay, pauses on hover, stops on user interaction
+- **Loop mode**: Infinite scrolling enabled
+- **Dot indicators**: New `CarouselDots` component -- animated active dot (wider), clickable to jump to slide
+- **Scroll progress bar**: New `CarouselProgress` component -- thin bar showing exact scroll position via `api.scrollProgress()`
+- **`selectedIndex` and `scrollSnaps`** exposed in context for dots
+- **`progress`** exposed in context for the progress bar
 
-### 2. `src/hooks/useParallax.ts`
+**Preserved features:**
+- Composable sub-components (CarouselContent, CarouselItem, CarouselPrevious, CarouselNext)
+- Horizontal + vertical orientation support
+- Keyboard navigation (arrow keys)
+- `opts`, `plugins`, `setApi` props
+- Proper event cleanup (select, reInit, scroll)
+- All existing exports maintained
 
-This hook is used by `AIHealthHero`, `SmartParserHero`, and `AccessibilityHero`. Currently it applies full parallax on all devices. Update it to:
+**Styling updates:**
+- Arrow buttons repositioned to work on mobile (inside the container instead of `-left-12` / `-right-12`)
+- CarouselItem keeps `basis-full` default but consumers can override with `md:basis-1/3` via className
+- Subtle 3D hover transform on slides: `hover:scale-[1.02]` with `transition-transform` and `transform-gpu`
 
-- Detect mobile viewport (same 640px breakpoint)
-- Detect `prefers-reduced-motion`
-- Use `speed * 0.33` multiplier on mobile (roughly 1/3 of desktop movement)
-- Disable entirely for reduced motion
+### 3. Export new components
+Add `CarouselDots` and `CarouselProgress` to the export list so they can be optionally used by consumers.
 
 ## Technical Details
-
-- No new dependencies required
-- Mobile detection reuses the same `window.innerWidth < 640` pattern already in `HeroSection`
-- The `useParallax` hook will add `useReducedMotion` from Framer Motion and a `useState`/`useEffect` for the mobile check
-- Output range on mobile: `[0, speed * 66]` vs desktop `[0, speed * 200]` -- a subtle, gentle effect
+- `embla-carousel-autoplay` is the official Embla plugin, compatible with the installed `embla-carousel-react` version
+- Autoplay ref created once and passed to `useEmblaCarousel` plugins array
+- `onMouseEnter` / `onMouseLeave` on the viewport div control autoplay pause/resume
+- The `scroll` event from Embla drives the progress bar via `api.scrollProgress()`
+- No changes to any other files -- this is a self-contained component upgrade
+- All existing sub-component APIs remain backward-compatible
 

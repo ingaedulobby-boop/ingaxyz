@@ -3,11 +3,11 @@ import { useState, useEffect, useMemo } from "react";
 import { useParallax } from "@/hooks/useParallax";
 
 const wcagChecks = [
-  { label: "Color Contrast", status: "AAA", pass: true },
-  { label: "Alt Text", status: "2 missing", pass: false },
-  { label: "Focus Order", status: "Pass", pass: true },
-  { label: "ARIA Labels", status: "1 warning", pass: false },
-  { label: "Heading Hierarchy", status: "Pass", pass: true },
+  { label: "Color Contrast", status: "AAA", pass: true, fix: "All text meets 7:1 ratio — no action needed." },
+  { label: "Alt Text", status: "2 missing", pass: false, fix: "Add descriptive alt to hero image and team photo." },
+  { label: "Focus Order", status: "Pass", pass: true, fix: "Tab order follows logical reading sequence." },
+  { label: "ARIA Labels", status: "1 warning", pass: false, fix: "Add aria-label to icon-only navigation button." },
+  { label: "Heading Hierarchy", status: "Pass", pass: true, fix: "H1→H2→H3 hierarchy is correct throughout." },
 ];
 
 const contrastPairs = [
@@ -145,18 +145,25 @@ export default function AccessibilityHero() {
             {wcagChecks.map((c, i) => (
               <motion.div
                 key={c.label}
-                className="flex items-center justify-between px-3 py-2 rounded-lg border border-white/5 bg-white/[0.02]"
+                className="group relative px-3 py-2 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/10 transition-colors cursor-default"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: prefersReduced ? 0 : 0.3 + i * 0.08, duration: 0.5 }}
               >
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${c.pass ? "bg-green-400" : "bg-amber-400"}`} />
-                  <span className="text-xs font-mono text-slate-200">{c.label}</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${c.pass ? "bg-green-400" : "bg-amber-400"}`} />
+                    <span className="text-xs font-mono text-slate-200">{c.label}</span>
+                  </div>
+                  <span className={`text-[10px] font-mono ${c.pass ? "text-green-400" : "text-amber-400"}`}>
+                    {c.status}
+                  </span>
                 </div>
-                <span className={`text-[10px] font-mono ${c.pass ? "text-green-400" : "text-amber-400"}`}>
-                  {c.status}
-                </span>
+                <div className="max-h-0 overflow-hidden opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300 ease-out">
+                  <p className={`text-[10px] font-mono mt-1.5 ${c.pass ? "text-slate-400" : "text-amber-300/70"}`}>
+                    💡 {c.fix}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>

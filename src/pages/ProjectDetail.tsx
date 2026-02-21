@@ -26,7 +26,9 @@ export default function ProjectDetail() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-mono font-bold text-foreground mb-4">Project Not Found</h1>
-          <Link to="/" className="text-primary font-mono hover:underline">← Back Home</Link>
+          <Link to="/" className="text-primary font-mono hover:underline">
+            ← Back Home
+          </Link>
         </div>
       </div>
     );
@@ -73,9 +75,7 @@ export default function ProjectDetail() {
       <div className="min-h-screen bg-background">
         {/* Animated Hero */}
         <div className="relative">
-          {HeroComponent ? <HeroComponent /> : (
-            <div className="h-[50vh] min-h-[400px] bg-secondary" />
-          )}
+          {HeroComponent ? <HeroComponent /> : <div className="h-[50vh] min-h-[400px] bg-secondary" />}
 
           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 max-w-4xl mx-auto">
             <Link
@@ -91,16 +91,12 @@ export default function ProjectDetail() {
             >
               <span
                 className={`font-mono text-xs px-2 py-1 rounded ${
-                  project.color === "primary"
-                    ? "bg-primary/10 text-primary"
-                    : "bg-accent/10 text-accent"
+                  project.color === "primary" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
                 }`}
               >
                 {project.tag}
               </span>
-              <h1 className="text-3xl sm:text-5xl font-mono font-bold mt-3 text-foreground">
-                {project.title}
-              </h1>
+              <h1 className="text-3xl sm:text-5xl font-mono font-bold mt-3 text-foreground">{project.title}</h1>
             </motion.div>
           </div>
         </div>
@@ -115,15 +111,31 @@ export default function ProjectDetail() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-6 rounded-xl glass"
           >
-            <motion.div initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ delay: 0.1, duration: 0.5 }}>
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+            >
               <p className="font-mono text-xs text-primary mb-1">Role</p>
               <p className="text-sm text-foreground">{project.role}</p>
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ delay: 0.2, duration: 0.5 }}>
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
               <p className="font-mono text-xs text-primary mb-1">Duration</p>
               <p className="text-sm text-foreground">{project.duration}</p>
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ delay: 0.3, duration: 0.5 }} className="col-span-2 sm:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, x: -15 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="col-span-2 sm:col-span-1"
+            >
               <p className="font-mono text-xs text-primary mb-1">Tools</p>
               <div className="flex flex-wrap gap-1">
                 {project.tools.map((t, ti) => (

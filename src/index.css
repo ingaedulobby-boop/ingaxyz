@@ -232,6 +232,27 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .text-gradient-warm {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--glow-success)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .border-gradient {
+    border-image: linear-gradient(135deg, hsl(var(--primary) / 0.4), hsl(var(--accent) / 0.4)) 1;
+  }
+  .bg-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 40%, hsl(var(--primary) / 0.08), transparent),
+      radial-gradient(ellipse 60% 60% at 80% 20%, hsl(var(--accent) / 0.06), transparent),
+      radial-gradient(ellipse 50% 80% at 50% 80%, hsl(var(--glow-success) / 0.04), transparent);
+  }
+  .dark .bg-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 40%, hsl(var(--primary) / 0.12), transparent),
+      radial-gradient(ellipse 60% 60% at 80% 20%, hsl(var(--accent) / 0.1), transparent),
+      radial-gradient(ellipse 50% 80% at 50% 80%, hsl(var(--glow-success) / 0.06), transparent);
+  }
   .dot-grid {
     background-image: radial-gradient(circle, hsl(var(--dot-grid)) 1px, transparent 1px);
     background-size: 30px 30px;
@@ -248,7 +269,6 @@
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }
-  /* Hide scrollbar but keep scroll */
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -256,12 +276,24 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
-  /* Safe area padding for mobile notch/gesture bar */
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  /* Mobile-first spacing scale: 16px → 24px → 48px */
   .section-px {
     @apply px-4 sm:px-6 lg:px-12;
+  }
+  .metric-chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold;
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+  .icon-badge {
+    @apply flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl;
+    background: hsl(var(--primary) / 0.1);
+  }
+  .icon-badge-accent {
+    @apply flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl;
+    background: hsl(var(--accent) / 0.1);
   }
 }

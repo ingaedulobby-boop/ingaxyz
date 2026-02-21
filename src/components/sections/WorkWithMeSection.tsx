@@ -30,17 +30,20 @@ const WorkWithMeSection = () => {
         subtitle="Choose an engagement model that fits your needs."
       />
 
-      <StaggerChildren className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <StaggerChildren className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
         {modes.map(({ icon: Icon, title, desc }) => (
           <motion.div
             key={title}
             variants={staggerItem}
-            className="text-center p-5 sm:p-6 rounded-lg bg-secondary/30 border border-border 
-                       hover:border-primary/40 active:border-primary/50 transition-all duration-300"
+            className="text-center p-5 sm:p-6 rounded-xl bg-card/60 border border-border 
+                       hover:border-primary/30 hover:shadow-[0_4px_20px_-4px_hsl(var(--primary)/0.15)]
+                       transition-all duration-300"
           >
-            <Icon className="w-8 h-8 text-primary mx-auto mb-4" />
+            <div className="icon-badge mx-auto mb-4">
+              <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+            </div>
             <h3 className="font-mono font-bold mb-2 text-sm sm:text-base">{title}</h3>
-            <p className="text-muted-foreground text-xs sm:text-sm">{desc}</p>
+            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{desc}</p>
           </motion.div>
         ))}
       </StaggerChildren>

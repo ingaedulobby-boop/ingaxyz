@@ -47,8 +47,8 @@ const HeroSection = () => {
 
   const { displayed, done } = useTypingEffect(FULL_TEXT, 55, 600);
 
-  const ctaTransition = { delay: 2.2, duration: 0.6, ease: "easeOut" };
-  const socialTransition = { delay: 2.8, duration: 0.6, ease: "easeOut" };
+  const ctaTransition = { delay: 2.2, duration: 0.6, ease: "easeOut" as const };
+  const socialTransition = { delay: 2.8, duration: 0.6, ease: "easeOut" as const };
 
   return (
     <section

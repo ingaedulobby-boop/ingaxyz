@@ -220,9 +220,15 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
           className={
             isMobile
               ? "fixed inset-0 z-[60] flex flex-col bg-background"
-              : "fixed bottom-20 right-4 z-[60] flex flex-col w-[400px] h-[520px] rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden"
+              : "fixed bottom-16 right-3 z-[60] flex flex-col w-[340px] h-[440px] rounded-2xl border border-border bg-card/80 backdrop-blur-xl overflow-hidden"
           }
-          style={isMobile ? { height: "100svh", paddingBottom: "env(safe-area-inset-bottom)" } : undefined}
+          style={{
+            ...(!isMobile ? {
+              boxShadow: "0 8px 30px -8px hsl(var(--foreground) / 0.15), 0 2px 8px -3px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--primary-foreground) / 0.05)",
+              transformStyle: "preserve-3d" as const,
+            } : { height: "100svh", paddingBottom: "env(safe-area-inset-bottom)" }),
+          }}
+          
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-window-header/60 backdrop-blur-md shrink-0">

@@ -32,7 +32,7 @@ export default function Index() {
     jobTitle: "AI Engineer & UX Designer",
     description: "Hybrid professional bridging AI engineering and human-centered design.",
     url: "https://portfolio.example.com",
-    knowsAbout: ["Machine Learning", "UX Design", "User Research", "AI Engineering"],
+    knowsAbout: ["Machine Learning", "UX Design", "User Research", "AI Engineering"]
   };
 
   return (
@@ -51,7 +51,7 @@ export default function Index() {
 
         <HeroSection />
 
-        <main className="relative z-10 mx-auto max-w-5xl space-y-14 sm:space-y-20 lg:space-y-24 section-px pb-28 sm:pb-36 -mt-16">
+        <main className="relative z-10 mx-auto max-w-5xl space-y-14 sm:space-y-20 lg:space-y-24 section-px pb-28 sm:pb-36 -mt-16 my-[60px]">
           <AboutSection />
           <WorkWithMeSection />
           <ProjectsSection />
@@ -65,6 +65,6 @@ export default function Index() {
         <AIChatButton isOpen={chatOpen} onClick={handleToggleChat} hasUnread={hasUnread} />
         <AIChatWindow isOpen={chatOpen} onClose={() => setChatOpen(false)} onNewMessage={handleNewMessage} />
       </div>
-    </>
-  );
+    </>);
+
 }

@@ -143,9 +143,9 @@ const BlogSection = () => {
 
       <div className="mt-6 sm:mt-8 pt-4 border-t border-border">
         <Button asChild variant="outline" className="w-full sm:w-auto gap-2">
-          <a href="https://ingakali.substack.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://ingakali.substack.com" target="_blank" rel="noopener noreferrer" className="text-sm bg-accent text-primary-foreground">
             Subscribe on Substack
-            <ExternalLink className="w-4 h-4 text-accent-foreground" />
+            <ExternalLink className="w-4 h-4 text-green-950" />
           </a>
         </Button>
       </div>

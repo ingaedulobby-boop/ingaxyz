@@ -95,7 +95,7 @@ const HeroSection = () => {
 
           Bridging cutting-edge machine learning with human-centered design.
         </p>
-        <p className="text-muted-foreground/60 text-[clamp(0.813rem,2vw,1rem)] max-w-xl mx-auto mb-10 sm:mb-12">
+        <p className="max-w-xl mx-auto mb-10 sm:mb-12 font-light text-xs text-primary">
           Every model I build is grounded in real user needs — from research to production. 💜
         </p>
 

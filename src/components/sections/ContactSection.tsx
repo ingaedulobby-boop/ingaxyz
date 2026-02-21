@@ -41,10 +41,10 @@ const ContactSection = () => {
           <SectionHeader
             title={<>Let's <span className="text-gradient">Connect</span></>} />
 
-          <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-base">
+          <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-sm">
             Have a project in mind? Want to collaborate on something at the intersection of AI and UX? Drop me a line.
           </p>
-          <div className="flex gap-3 sm:gap-4">
+          <div className="flex gap-3 sm:gap-[12px]">
             {[
             { icon: Github, href: "https://github.com/ikali0", label: "GitHub" },
             { icon: Linkedin, href: "https://www.linkedin.com/in/ik11", label: "LinkedIn" },
@@ -111,10 +111,10 @@ const ContactSection = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-lg 
-                       bg-primary text-primary-foreground font-mono font-semibold 
-                       hover:glow-primary active:scale-[0.98] transition-all duration-300 
-                       disabled:opacity-50 disabled:cursor-not-allowed">
+            className="w-full sm:w-auto flex items-center justify-center py-3 sm:py-2.5 rounded-lg bg-primary text-primary-foreground font-mono font-semibold hover:glow-primary active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed gap-[6px] px-[20px]">
+
+
+
 
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             {isSubmitting ? "Sending..." : "Send Message"}

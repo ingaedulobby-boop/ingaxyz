@@ -41,7 +41,7 @@ const ContactSection = () => {
           <SectionHeader
             title={<>Let's <span className="text-gradient">Connect</span></>} />
 
-          <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-sm">
+          <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-base">
             Have a project in mind? Want to collaborate on something at the intersection of AI and UX? Drop me a line.
           </p>
           <div className="flex gap-3 sm:gap-[12px]">

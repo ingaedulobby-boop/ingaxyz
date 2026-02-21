@@ -173,7 +173,7 @@ export default function WindowPanel({
 
       {/* Header / Title bar */}
       <div
-        className={clsx("flex items-center justify-between px-3 py-2.5 sm:py-3 bg-window-header/60 border-b border-border backdrop-blur-md sm:px-[20px]",
+        className={clsx("flex items-center justify-between px-3 py-2.5 sm:py-3 bg-window-header/60 border-b border-border backdrop-blur-md sm:px-[20px] text-primary",
 
 
 

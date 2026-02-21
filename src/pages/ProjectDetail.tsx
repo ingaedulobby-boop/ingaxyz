@@ -1,12 +1,13 @@
-import type { ComponentType } from "react";
+import { lazy, Suspense, type ComponentType } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/data/projects";
-import AIHealthHero from "@/components/project-hero/AIHealthHero";
-import SmartParserHero from "@/components/project-hero/SmartParserHero";
-import AccessibilityHero from "@/components/project-hero/AccessibilityHero";
+
+const AIHealthHero = lazy(() => import("@/components/project-hero/AIHealthHero"));
+const SmartParserHero = lazy(() => import("@/components/project-hero/SmartParserHero"));
+const AccessibilityHero = lazy(() => import("@/components/project-hero/AccessibilityHero"));
 
 const SITE_URL = "https://ingaxyz.lovable.app";
 
@@ -14,6 +15,12 @@ const heroComponents: Record<string, ComponentType> = {
   "ai-health-companion": AIHealthHero,
   "smart-document-parser": SmartParserHero,
   "accessibility-audit-tool": AccessibilityHero,
+};
+
+const ogImages: Record<string, string> = {
+  "ai-health-companion": "/og-health.png",
+  "smart-document-parser": "/og-parser.png",
+  "accessibility-audit-tool": "/og-accessibility.png",
 };
 
 export default function ProjectDetail() {
@@ -64,7 +71,7 @@ export default function ProjectDetail() {
         <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={`${project.title} — Case Study`} />
         <meta property="og:description" content={project.solution} />
-        <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
+        <meta property="og:image" content={`${SITE_URL}${ogImages[project.slug] || "/og-image.png"}`} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${project.title} — Inga Kali`} />
@@ -76,7 +83,13 @@ export default function ProjectDetail() {
       <div className="min-h-screen bg-background">
         {/* Animated Hero */}
         <div className="relative">
-          {HeroComponent ? <HeroComponent /> : <div className="h-[50vh] min-h-[400px] bg-secondary" />}
+          {HeroComponent ? (
+            <Suspense fallback={<div className="h-[50vh] min-h-[400px] bg-secondary animate-pulse" />}>
+              <HeroComponent />
+            </Suspense>
+          ) : (
+            <div className="h-[50vh] min-h-[400px] bg-secondary" />
+          )}
 
           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 max-w-4xl mx-auto">
             <Link

@@ -1,8 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useParallax } from "@/hooks/useParallax";
 
-// Generate a deterministic neural network graph
 function generateNetwork(nodeCount: number, seed: number) {
   const nodes: { x: number; y: number }[] = [];
   for (let i = 0; i < nodeCount; i++) {
@@ -18,9 +17,7 @@ function generateNetwork(nodeCount: number, seed: number) {
     for (let j = i + 1; j < nodeCount; j++) {
       const dx = nodes[i].x - nodes[j].x;
       const dy = nodes[i].y - nodes[j].y;
-      if (Math.sqrt(dx * dx + dy * dy) < 160) {
-        edges.push({ from: i, to: j });
-      }
+      if (Math.sqrt(dx * dx + dy * dy) < 160) edges.push({ from: i, to: j });
     }
   }
   return { nodes, edges };
@@ -72,7 +69,6 @@ function NeuralNetworkSVG() {
           }}
         />
       ))}
-      {/* Pulse traveling along a few edges */}
       {!prefersReduced && edges.slice(0, 5).map((e, i) => (
         <motion.circle
           key={`p${i}`}
@@ -127,18 +123,9 @@ export default function SmartParserHero() {
   const prefersReduced = useReducedMotion();
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hoveredFile, setHoveredFile] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
-  );
-
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || prefersReduced) return;
+    if (prefersReduced) return;
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / 25;
     const yVal = (e.clientY - top - height / 2) / 25;
@@ -172,12 +159,12 @@ export default function SmartParserHero() {
 
       {/* Main glassmorphism card */}
       <motion.div
-        className="relative z-10 w-full max-w-2xl rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 p-5 sm:p-7 shadow-[0_0_60px_rgba(139,92,246,0.15)]"
+        className="relative z-10 w-full max-w-2xl rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 p-5 sm:p-7 shadow-[0_0_60px_rgba(139,92,246,0.15)] hero-parallax-layer"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 160, damping: 20 }}
         style={{
-          transform: isMobile || prefersReduced
+          transform: prefersReduced
             ? undefined
             : `perspective(1000px) rotateX(${-tilt.y}deg) rotateY(${tilt.x}deg)`,
           transition: "transform 0.15s ease-out",

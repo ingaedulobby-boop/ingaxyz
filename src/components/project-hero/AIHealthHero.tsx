@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useParallax } from "@/hooks/useParallax";
 
 function generateNetwork(nodeCount: number, seed: number) {
@@ -65,18 +65,9 @@ export default function AIHealthHero() {
   const { ref, y } = useParallax(0.3);
   const prefersReduced = useReducedMotion();
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
-  );
-
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || prefersReduced) return;
+    if (prefersReduced) return;
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / 25;
     const y = (e.clientY - top - height / 2) / 25;
@@ -107,12 +98,12 @@ export default function AIHealthHero() {
 
       {/* Dashboard card with 3D tilt */}
       <motion.div
-        className="relative z-10 w-full max-w-lg rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 p-6 sm:p-8 shadow-[0_0_80px_rgba(34,211,238,0.15)]"
+        className="relative z-10 w-full max-w-lg rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 p-6 sm:p-8 shadow-[0_0_80px_rgba(34,211,238,0.15)] hero-parallax-layer"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 180, damping: 20 }}
         style={{
-          transform: isMobile || prefersReduced
+          transform: prefersReduced
             ? undefined
             : `perspective(1000px) rotateX(${-tilt.y}deg) rotateY(${tilt.x}deg)`,
           transition: "transform 0.15s ease-out",

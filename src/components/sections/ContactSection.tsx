@@ -1,4 +1,5 @@
 import WindowPanel from "@/components/WindowPanel";
+import SectionHeader from "@/components/SectionHeader";
 import { Github, Linkedin, Twitter, Send, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,9 +38,9 @@ const ContactSection = () => {
     <WindowPanel title="contact.sh" id="contact">
       <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         <div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5 leading-tight">
-            Let's <span className="text-gradient">Connect</span>
-          </h2>
+          <SectionHeader
+            title={<>Let's <span className="text-gradient">Connect</span></>}
+          />
           <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-base">
             Have a project in mind? Want to collaborate on something at the intersection of AI and UX? Drop me a line.
           </p>

@@ -1,4 +1,5 @@
 import WindowPanel from "@/components/WindowPanel";
+import SectionHeader from "@/components/SectionHeader";
 import { Brain, Palette, Search, Code, Figma, BarChart3 } from "lucide-react";
 import StaggerChildren, { staggerItem } from "@/components/StaggerChildren";
 import { motion } from "framer-motion";
@@ -17,10 +18,11 @@ const AboutSection = () => {
     <WindowPanel title="about_me.md" id="about" accent="accent" draggable>
       <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         <div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5 leading-tight">
-            The <span className="text-gradient">intersection</span> is where the magic happens.
-          </h2>
-          <p className="leading-relaxed mb-3 sm:mb-4 text-muted-foreground text-sm sm:text-base">
+          <SectionHeader
+            title={<>The <span className="text-gradient">intersection</span> is where the magic happens.</>}
+          />
+          
+          <p className="leading-relaxed mb-3 sm:mb-4 text-muted-foreground text-sm sm:text-base mt-4">
             I'm a hybrid professional—part AI engineer, part UX designer, with deep research expertise.
             I don't just build models; I make sure they fit intuitively into user experiences.
           </p>

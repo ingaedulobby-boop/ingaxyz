@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import WindowPanel from "@/components/WindowPanel";
+import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { projects } from "@/data/projects";
@@ -7,12 +8,10 @@ import { projects } from "@/data/projects";
 const ProjectsSection = () => {
   return (
     <WindowPanel title="~/projects" id="projects" draggable>
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
-        Case <span className="text-gradient">Studies</span>
-      </h2>
-      <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">
-        Where AI meets human-centered design.
-      </p>
+      <SectionHeader
+        title={<>Case <span className="text-gradient">Studies</span></>}
+        subtitle="Where AI meets human-centered design."
+      />
 
       <div className="space-y-4 sm:space-y-6">
         {projects.map((project, i) => (

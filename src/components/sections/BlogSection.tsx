@@ -1,4 +1,5 @@
 import WindowPanel from "@/components/WindowPanel";
+import SectionHeader from "@/components/SectionHeader";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -74,12 +75,10 @@ const BlogSection = () => {
 
   return (
     <WindowPanel title="blog/" id="blog" accent="accent" draggable>
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
-        Latest <span className="text-gradient">Thoughts</span>
-      </h2>
-      <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">
-        On AI, UX, and everything in between.
-      </p>
+      <SectionHeader
+        title={<>Latest <span className="text-gradient">Thoughts</span></>}
+        subtitle="On AI, UX, and everything in between."
+      />
 
       <div className="space-y-3 sm:space-y-4">
         {isLoading

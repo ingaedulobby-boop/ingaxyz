@@ -103,7 +103,7 @@ export default function ProjectDetail() {
         </div>
 
         {/* Content */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
+        <main className="max-w-4xl mx-auto px-4 space-y-12 sm:px-[20px] py-[38px]">
           {/* Meta */}
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
@@ -118,8 +118,8 @@ export default function ProjectDetail() {
               viewport={{ once: false }}
               transition={{ delay: 0.1, duration: 0.5 }}>
 
-              <p className="font-mono text-xs text-primary mb-1">Role</p>
-              <p className="text-sm text-foreground">{project.role}</p>
+              <p className="font-mono text-xs text-primary mb-1 text-center">Role</p>
+              <p className="text-sm text-foreground text-center">{project.role}</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -15 }}
@@ -127,8 +127,8 @@ export default function ProjectDetail() {
               viewport={{ once: false }}
               transition={{ delay: 0.2, duration: 0.5 }}>
 
-              <p className="font-mono text-xs text-primary mb-1">Duration</p>
-              <p className="text-sm text-foreground">{project.duration}</p>
+              <p className="font-mono text-xs text-primary mb-1 text-center">Duration</p>
+              <p className="text-sm text-foreground text-center">{project.duration}</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -15 }}
@@ -137,8 +137,8 @@ export default function ProjectDetail() {
               transition={{ delay: 0.3, duration: 0.5 }}
               className="col-span-2 sm:col-span-1">
 
-              <p className="font-mono text-xs text-primary mb-1">Tools</p>
-              <div className="flex flex-wrap gap-1">
+              <p className="font-mono text-xs text-primary mb-1 text-center">Tools</p>
+              <div className="flex-wrap flex items-start justify-center gap-[2px]">
                 {project.tools.map((t, ti) =>
                 <motion.span
                   key={t}
@@ -146,7 +146,7 @@ export default function ProjectDetail() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: false }}
                   transition={{ delay: 0.3 + ti * 0.05, duration: 0.3 }}
-                  className="text-xs px-2 py-0.5 rounded bg-secondary text-secondary-foreground">
+                  className="text-xs px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-left">
 
                     {t}
                   </motion.span>

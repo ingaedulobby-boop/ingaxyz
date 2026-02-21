@@ -18,8 +18,8 @@ const ContactSection = () => {
         body: {
           name: formState.name.trim(),
           email: formState.email.trim(),
-          message: formState.message.trim(),
-        },
+          message: formState.message.trim()
+        }
       });
 
       if (error) throw error;
@@ -39,29 +39,29 @@ const ContactSection = () => {
       <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         <div>
           <SectionHeader
-            title={<>Let's <span className="text-gradient">Connect</span></>}
-          />
+            title={<>Let's <span className="text-gradient">Connect</span></>} />
+
           <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm sm:text-base">
             Have a project in mind? Want to collaborate on something at the intersection of AI and UX? Drop me a line.
           </p>
           <div className="flex gap-3 sm:gap-4">
             {[
-              { icon: Github, href: "https://github.com/ikali0", label: "GitHub" },
-              { icon: Linkedin, href: "https://www.linkedin.com/in/ik11", label: "LinkedIn" },
-              { icon: Twitter, href: "https://x.com/humynity50521", label: "Twitter" },
-            ].map(({ icon: Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="w-11 h-11 sm:w-10 sm:h-10 rounded-lg bg-secondary/50 border border-border flex items-center justify-center 
-                           hover:border-primary hover:text-primary active:bg-primary/10 transition-all"
-              >
-                <Icon className="w-5 h-5" />
+            { icon: Github, href: "https://github.com/ikali0", label: "GitHub" },
+            { icon: Linkedin, href: "https://www.linkedin.com/in/ik11", label: "LinkedIn" },
+            { icon: Twitter, href: "https://x.com/humynity50521", label: "Twitter" }].
+            map(({ icon: Icon, href, label }) =>
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="w-11 h-11 sm:w-10 sm:h-10 rounded-lg bg-secondary/50 border border-border flex items-center justify-center 
+                           hover:border-primary hover:text-primary active:bg-primary/10 transition-all">
+
+                <Icon className="w-5 h-5 bg-transparent text-purple-500" />
               </a>
-            ))}
+            )}
           </div>
         </div>
 
@@ -77,8 +77,8 @@ const ContactSection = () => {
               onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
               className="w-full px-4 py-3 sm:py-2.5 rounded-lg bg-secondary/50 border border-border text-foreground 
                          focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all font-sans text-sm"
-              placeholder="Your name"
-            />
+              placeholder="Your name" />
+
           </div>
           <div>
             <label htmlFor="email" className="font-mono text-xs text-muted-foreground block mb-1">email</label>
@@ -91,8 +91,8 @@ const ContactSection = () => {
               onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
               className="w-full px-4 py-3 sm:py-2.5 rounded-lg bg-secondary/50 border border-border text-foreground 
                          focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all font-sans text-sm"
-              placeholder="you@example.com"
-            />
+              placeholder="you@example.com" />
+
           </div>
           <div>
             <label htmlFor="message" className="font-mono text-xs text-muted-foreground block mb-1">message</label>
@@ -105,8 +105,8 @@ const ContactSection = () => {
               onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
               className="w-full px-4 py-3 sm:py-2.5 rounded-lg bg-secondary/50 border border-border text-foreground 
                          focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all font-sans text-sm resize-none"
-              placeholder="Tell me about your project..."
-            />
+              placeholder="Tell me about your project..." />
+
           </div>
           <button
             type="submit"
@@ -114,15 +114,15 @@ const ContactSection = () => {
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-lg 
                        bg-primary text-primary-foreground font-mono font-semibold 
                        hover:glow-primary active:scale-[0.98] transition-all duration-300 
-                       disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+                       disabled:opacity-50 disabled:cursor-not-allowed">
+
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             {isSubmitting ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>
-    </WindowPanel>
-  );
+    </WindowPanel>);
+
 };
 
 export default ContactSection;

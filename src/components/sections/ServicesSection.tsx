@@ -8,44 +8,44 @@ import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+  ChartTooltipContent } from
+"@/components/ui/chart";
 
 /* ── Map ───────────────────────────────────────────────────────────── */
 const map = new DottedMap({ height: 55, grid: "diagonal" });
 const points = map.getPoints();
 
-const WorldMap = () => (
-  <svg viewBox="0 0 120 60" className="w-full h-full text-foreground/20">
-    {points.map((point, i) => (
-      <circle
-        key={i}
-        cx={point.x}
-        cy={point.y}
-        r={0.15}
-        fill="currentColor"
-      />
-    ))}
-  </svg>
-);
+const WorldMap = () =>
+<svg viewBox="0 0 120 60" className="w-full h-full text-foreground/20">
+    {points.map((point, i) =>
+  <circle
+    key={i}
+    cx={point.x}
+    cy={point.y}
+    r={0.15}
+    fill="currentColor" />
+
+  )}
+  </svg>;
+
 
 /* ── Chart ─────────────────────────────────────────────────────────── */
 const chartConfig = {
   models: { label: "Models Shipped", color: "hsl(var(--primary))" },
-  prototypes: { label: "Prototypes", color: "hsl(var(--accent))" },
+  prototypes: { label: "Prototypes", color: "hsl(var(--accent))" }
 } satisfies ChartConfig;
 
 const chartData = [
-  { month: "Jan", models: 3, prototypes: 5 },
-  { month: "Feb", models: 5, prototypes: 8 },
-  { month: "Mar", models: 4, prototypes: 6 },
-  { month: "Apr", models: 8, prototypes: 12 },
-  { month: "May", models: 6, prototypes: 9 },
-  { month: "Jun", models: 10, prototypes: 16 },
-];
+{ month: "Jan", models: 3, prototypes: 5 },
+{ month: "Feb", models: 5, prototypes: 8 },
+{ month: "Mar", models: 4, prototypes: 6 },
+{ month: "Apr", models: 8, prototypes: 12 },
+{ month: "May", models: 6, prototypes: 9 },
+{ month: "Jun", models: 10, prototypes: 16 }];
 
-const MonitoringChart = () => (
-  <ChartContainer config={chartConfig} className="aspect-auto h-full w-full">
+
+const MonitoringChart = () =>
+<ChartContainer config={chartConfig} className="aspect-auto h-full w-full">
     <AreaChart data={chartData}>
       <defs>
         <linearGradient id="fillModels" x1="0" y1="0" x2="0" y2="1">
@@ -58,33 +58,33 @@ const MonitoringChart = () => (
         </linearGradient>
       </defs>
       <CartesianGrid
-        vertical={false}
-        strokeDasharray="3 3"
-        stroke="hsl(var(--border))"
-      />
+      vertical={false}
+      strokeDasharray="3 3"
+      stroke="hsl(var(--border))" />
+
       <Area
-        dataKey="prototypes"
-        type="natural"
-        fill="url(#fillPrototypes)"
-        stroke="hsl(var(--accent))"
-        strokeWidth={2}
-        stackId="a"
-      />
+      dataKey="prototypes"
+      type="natural"
+      fill="url(#fillPrototypes)"
+      stroke="hsl(var(--accent))"
+      strokeWidth={2}
+      stackId="a" />
+
       <Area
-        dataKey="models"
-        type="natural"
-        fill="url(#fillModels)"
-        stroke="hsl(var(--primary))"
-        strokeWidth={2}
-        stackId="a"
-      />
+      dataKey="models"
+      type="natural"
+      fill="url(#fillModels)"
+      stroke="hsl(var(--primary))"
+      strokeWidth={2}
+      stackId="a" />
+
       <ChartTooltip
-        cursor={false}
-        content={<ChartTooltipContent indicator="dot" />}
-      />
+      cursor={false}
+      content={<ChartTooltipContent indicator="dot" />} />
+
     </AreaChart>
-  </ChartContainer>
-);
+  </ChartContainer>;
+
 
 /* ── Section ───────────────────────────────────────────────────────── */
 const ServicesSection = () => {
@@ -92,12 +92,12 @@ const ServicesSection = () => {
     <WindowPanel title="services.config" id="services" accent="accent" draggable>
       <SectionHeader
         title={
-          <>
+        <>
             What I <span className="text-gradient">Offer</span>
           </>
         }
-        subtitle="Tailored solutions at the intersection of AI and UX."
-      />
+        subtitle="Tailored solutions at the intersection of AI and UX." />
+
 
       <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-5 sm:gap-4">
         {/* ── Card 1: AI Engineering (wide) ─────────────────── */}
@@ -171,14 +171,14 @@ const ServicesSection = () => {
         </div>
 
         {/* ── Card 3: Uptime / Reliability ─────────────────── */}
-        <div className="sm:col-span-2 rounded-xl border border-border bg-card/60 p-5 sm:p-6 flex flex-col items-center justify-center min-h-[140px]">
+        <div className="sm:col-span-2 border border-border bg-card/60 p-5 sm:p-6 flex flex-col items-center justify-center min-h-[140px] px-[11px] py-[11px] rounded-sm">
           <motion.p
             initial={{ scale: 0.9, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-3xl sm:text-4xl font-bold font-mono text-primary"
-          >
+            className="text-3xl sm:text-4xl font-bold font-mono text-primary">
+
             99.9%
           </motion.p>
           <p className="text-sm text-muted-foreground mt-1">Model Uptime SLA</p>
@@ -226,8 +226,8 @@ const ServicesSection = () => {
           </div>
         </div>
       </div>
-    </WindowPanel>
-  );
+    </WindowPanel>);
+
 };
 
 export default ServicesSection;

@@ -34,10 +34,13 @@ function SkillCard({ icon: Icon, label, desc, index }: { icon: typeof Brain; lab
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
       style={isMobile ? undefined : { y }}
-      className="p-3 sm:p-4 rounded-lg bg-secondary/50 border border-border 
-                 hover:border-primary/30 active:border-primary/40 transition-colors will-change-transform"
+      className="p-3 sm:p-4 rounded-xl bg-card/60 border border-border 
+                 hover:border-primary/30 hover:shadow-[0_4px_20px_-4px_hsl(var(--primary)/0.1)]
+                 transition-all duration-300 will-change-transform"
     >
-      <Icon className="w-5 h-5 text-primary mb-2" />
+      <div className="icon-badge mb-3">
+        <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+      </div>
       <p className="font-mono text-xs sm:text-sm font-semibold text-foreground">{label}</p>
       <p className="text-xs text-muted-foreground mt-1">{desc}</p>
     </motion.div>

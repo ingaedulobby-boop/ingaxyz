@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
@@ -7,8 +8,23 @@ import ServicesSection from "@/components/sections/ServicesSection";
 import BlogSection from "@/components/sections/BlogSection";
 import ContactSection from "@/components/sections/ContactSection";
 import Taskbar from "@/components/Taskbar";
+import AIChatButton from "@/components/AIChatButton";
+import AIChatWindow from "@/components/AIChatWindow";
 
 export default function Index() {
+  const [chatOpen, setChatOpen] = useState(false);
+  const [hasUnread, setHasUnread] = useState(false);
+
+  const handleToggleChat = useCallback(() => {
+    setChatOpen((prev) => {
+      if (!prev) setHasUnread(false);
+      return !prev;
+    });
+  }, []);
+
+  const handleNewMessage = useCallback(() => {
+    if (!chatOpen) setHasUnread(true);
+  }, [chatOpen]);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -53,6 +69,9 @@ export default function Index() {
         </main>
 
         <Taskbar />
+
+        <AIChatButton isOpen={chatOpen} onClick={handleToggleChat} hasUnread={hasUnread} />
+        <AIChatWindow isOpen={chatOpen} onClose={() => setChatOpen(false)} onNewMessage={handleNewMessage} />
       </div>
     </>
   );

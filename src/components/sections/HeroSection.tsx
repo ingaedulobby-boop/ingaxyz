@@ -10,9 +10,10 @@ const AFTER_TEXT = " people love to use.";
 
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
+
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
@@ -21,29 +22,35 @@ const HeroSection = () => {
 
   const { displayed, done } = useTypingEffect(FULL_TEXT, 55, 600);
 
+  const ctaTransition = { delay: 2.2, duration: 0.6, ease: "easeOut" };
+  const socialTransition = { delay: 2.8, duration: 0.6, ease: "easeOut" };
+
   return (
-    <section ref={ref} id="home" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+    <section
+      ref={ref}
+      id="home"
+      aria-label="Inga portfolio hero"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden"
+    >
       {/* Parallax Background */}
-      <motion.div className="absolute inset-0" style={{ y: bgY }}>
-        <img src={desktopBg} alt="" className="w-full h-full object-cover opacity-30 scale-110" />
+      <motion.div className="absolute inset-0" style={{ y: bgY }} aria-hidden="true">
+        <img
+          src={desktopBg}
+          alt="Abstract background representing AI and design"
+          className="w-full h-full object-cover opacity-30 scale-110"
+          loading="eager"
+        />
         <div className="absolute inset-0 bg-background/50" />
       </motion.div>
 
       {/* Mesh gradient overlay */}
-      <div className="absolute inset-0 bg-mesh pointer-events-none" />
+      <div className="absolute inset-0 bg-mesh pointer-events-none" aria-hidden="true" />
 
-      <motion.div
-        className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto"
-        style={{ y: contentY, opacity }}
-      >
-        {/* Use CSS visibility instead of Framer scale animation to prevent CLS */}
+      <motion.div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto" style={{ y: contentY, opacity }}>
         <div>
-
-          {/* Role badge — no initial layout-shifting animation */}
+          {/* Role badge */}
           <div className="mb-6 sm:mb-8 min-h-[32px] flex items-center justify-center">
-            <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm animate-fade-in"
-            >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm animate-fade-in">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="font-mono text-primary text-[11px] sm:text-xs tracking-widest uppercase">
                 AI Engineer · UX Designer · Researcher
@@ -51,27 +58,36 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Main headline — reserve full space to prevent CLS */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em]">
-            <span aria-hidden="true">
-              {displayed}
-              {!done && <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />}
+          {/* Main headline */}
+          <h1 className="relative text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em]">
+            {/* aria-live for typing; hide the visual caret from SRs */}
+            <span aria-live="polite" aria-atomic="true" className="inline-block">
+              <span aria-hidden="true">
+                {displayed}
+                {!done && (
+                  <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />
+                )}
+              </span>
             </span>
             {done && (
               <span className="animate-fade-in">
                 {" "}
-                <span className="text-gradient">people love</span>{" "}
-                to use.
+                <span className="text-gradient">people love</span> to use.
               </span>
             )}
-            {/* Invisible text to reserve layout space and prevent CLS */}
-            <span className="invisible absolute" aria-label={FULL_TEXT + AFTER_TEXT}>
-              {FULL_TEXT}{AFTER_TEXT}
+
+            {/* Invisible full text to reserve layout space and prevent CLS */}
+            <span className="invisible absolute inset-0 pointer-events-none" aria-hidden="true">
+              {FULL_TEXT}
+              {AFTER_TEXT}
             </span>
           </h1>
 
           {/* Tagline */}
-          <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-3 leading-relaxed" style={{ fontFamily: "var(--font-serif)" }}>
+          <p
+            className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-3 leading-relaxed"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
             Bridging cutting-edge machine learning with human-centered design.
           </p>
           <p className="text-muted-foreground/60 text-sm sm:text-base max-w-xl mx-auto mb-10 sm:mb-12">
@@ -83,35 +99,29 @@ const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2, duration: 0.6 }}
-          className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 px-2 w-full">
-
+          transition={ctaTransition}
+          className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 px-2 w-full"
+        >
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base text-center
-                       shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)]
-                       hover:shadow-[0_6px_20px_0_hsl(var(--primary)/0.4)]
-                       hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_0_hsl(var(--primary)/0.3)]
-                       transition-all duration-200">
-            <Sparkles className="w-4 h-4" />
+            className="group inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base text-center shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)] hover:shadow-[0_6px_20px_0_hsl(var(--primary)/0.4)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_0_hsl(var(--primary)/0.3)] transition-all duration-200"
+          >
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
             View Projects
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
           </Link>
+
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-secondary text-secondary-foreground font-mono font-semibold text-sm sm:text-base text-center
-                       border border-border
-                       hover:border-primary/40 hover:bg-secondary/80 hover:-translate-y-0.5
-                       active:translate-y-0
-                       transition-all duration-200">
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-secondary text-secondary-foreground font-mono font-semibold text-sm sm:text-base text-center border border-border hover:border-primary/40 hover:bg-secondary/80 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+          >
             Services
           </Link>
+
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border border-border/60 text-muted-foreground font-mono font-semibold text-sm sm:text-base text-center
-                       hover:border-primary hover:text-primary hover:-translate-y-0.5
-                       active:translate-y-0
-                       transition-all duration-200">
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border border-border/60 text-muted-foreground font-mono font-semibold text-sm sm:text-base text-center hover:border-primary hover:text-primary hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+          >
             Get in Touch
           </Link>
         </motion.div>
@@ -120,7 +130,7 @@ const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.8, duration: 0.6 }}
+          transition={socialTransition}
           className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-10 text-muted-foreground/50 text-xs font-mono uppercase tracking-wider"
         >
           <span>15K+ Users Served</span>
@@ -134,9 +144,11 @@ const HeroSection = () => {
       {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
+        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         className="absolute bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 hidden sm:block"
-        style={{ opacity }}>
+        style={{ opacity }}
+        aria-hidden="true"
+      >
         <div className="w-5 h-8 rounded-full border-2 border-muted-foreground/40 flex items-start justify-center p-1">
           <div className="w-1 h-2 rounded-full bg-primary" />
         </div>

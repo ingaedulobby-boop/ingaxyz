@@ -16,6 +16,7 @@ function extractItems(xml: string) {
     pubDate: string;
     excerpt: string;
     categories: string[];
+    thumbnail: string | null;
   }> = [];
 
   const itemRegex = /<item>([\s\S]*?)<\/item>/g;
@@ -46,7 +47,14 @@ function extractItems(xml: string) {
       categories.push(catMatch[1] || catMatch[2]);
     }
 
-    items.push({ title: title.trim(), link: link.trim(), pubDate: pubDate.trim(), excerpt, categories });
+    // Extract thumbnail from enclosure, media:content, or first img in description
+    const thumbnail = itemXml.match(/<enclosure[^>]+url="([^"]+)"[^>]*type="image/)?.[1]
+      || itemXml.match(/<media:content[^>]+url="([^"]+)"/)?.[1]
+      || itemXml.match(/<media:thumbnail[^>]+url="([^"]+)"/)?.[1]
+      || descriptionRaw.match(/<img[^>]+src="([^"]+)"/)?.[1]
+      || null;
+
+    items.push({ title: title.trim(), link: link.trim(), pubDate: pubDate.trim(), excerpt, categories, thumbnail });
   }
 
   return items;

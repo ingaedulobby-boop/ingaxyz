@@ -76,13 +76,13 @@ const ProjectsSection = () => {
                 <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{project.solution}</p>
                 
                 {/* Metric chips */}
-                <div className="flex flex-wrap gap-1.5">
-                  {project.results.slice(0, 3).map((r) =>
-                <span key={r.label} className="metric-chip">
-                      {r.value} <span className="text-muted-foreground font-normal">{r.label}</span>
-                    </span>
-                )}
-                </div>
+                
+
+
+
+
+
+
               </div>
             </Link>
           </motion.div>

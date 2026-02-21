@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import desktopBg from "@/assets/desktop-bg.jpg";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -8,17 +8,42 @@ import { ArrowRight, Sparkles } from "lucide-react";
 const FULL_TEXT = "I build AI solutions";
 const AFTER_TEXT = " people love to use.";
 
+const MOBILE_BREAKPOINT = 640; // Tailwind sm
+
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const prefersReducedMotion = useReducedMotion();
+
+  const [isMobile, setIsMobile] = useState<boolean>(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false,
+  );
+
+  // Update on resize
+  useEffect(() => {
+    const onResize = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Parallax ranges:
+  // - Desktop: stronger movement
+  // - Mobile: subtle or disabled movement
+  const bgY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion || isMobile ? ["0%", "0%"] : ["0%", "30%"]);
+
+  const contentY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReducedMotion || isMobile ? ["0%", "0%"] : ["0%", "15%"],
+  );
+
+  const opacity = useTransform(scrollYProgress, [0, 0.8], prefersReducedMotion ? [1, 1] : [1, 0]);
 
   const { displayed, done } = useTypingEffect(FULL_TEXT, 55, 600);
 
@@ -32,8 +57,8 @@ const HeroSection = () => {
       aria-label="Inga portfolio hero"
       className="relative min-h-[100svh] flex items-center justify-center overflow-hidden"
     >
-      {/* Parallax Background */}
-      <motion.div className="absolute inset-0" style={{ y: bgY }} aria-hidden="true">
+      {/* Background: use motion only when parallax is active */}
+      <motion.div className="absolute inset-0" style={prefersReducedMotion ? {} : { y: bgY }} aria-hidden="true">
         <img
           src={desktopBg}
           alt="Abstract background representing AI and design"
@@ -46,7 +71,11 @@ const HeroSection = () => {
       {/* Mesh gradient overlay */}
       <div className="absolute inset-0 bg-mesh pointer-events-none" aria-hidden="true" />
 
-      <motion.div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto" style={{ y: contentY, opacity }}>
+      {/* Content wrapper */}
+      <motion.div
+        className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto"
+        style={prefersReducedMotion ? {} : { y: contentY, opacity }}
+      >
         <div>
           {/* Role badge */}
           <div className="mb-6 sm:mb-8 min-h-[32px] flex items-center justify-center">
@@ -58,9 +87,8 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Main headline */}
-          <h1 className="relative text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em]">
-            {/* aria-live for typing; hide the visual caret from SRs */}
+          {/* Headline */}
+          <h1 className="relative text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em]">
             <span aria-live="polite" aria-atomic="true" className="inline-block">
               <span aria-hidden="true">
                 {displayed}
@@ -75,8 +103,6 @@ const HeroSection = () => {
                 <span className="text-gradient">people love</span> to use.
               </span>
             )}
-
-            {/* Invisible full text to reserve layout space and prevent CLS */}
             <span className="invisible absolute inset-0 pointer-events-none" aria-hidden="true">
               {FULL_TEXT}
               {AFTER_TEXT}
@@ -95,16 +121,16 @@ const HeroSection = () => {
           </p>
         </div>
 
-        {/* CTA buttons */}
+        {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          animate={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
           transition={ctaTransition}
           className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 px-2 w-full"
         >
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base text-center shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)] hover:shadow-[0_6px_20px_0_hsl(var(--primary)/0.4)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_0_hsl(var(--primary)/0.3)] transition-all duration-200"
+            className="group inline-flex items-center gap-2 px-5 sm:px-8 py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base text-center shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)] hover:shadow-[0_6px_20px_0_hsl(var(--primary)/0.4)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_0_hsl(var(--primary)/0.3)] transition-all duration-200"
           >
             <Sparkles className="w-4 h-4" aria-hidden="true" />
             View Projects
@@ -113,14 +139,14 @@ const HeroSection = () => {
 
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-secondary text-secondary-foreground font-mono font-semibold text-sm sm:text-base text-center border border-border hover:border-primary/40 hover:bg-secondary/80 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-5 sm:px-8 py-3 rounded-xl bg-secondary text-secondary-foreground font-mono font-semibold text-sm sm:text-base text-center border border-border hover:border-primary/40 hover:bg-secondary/80 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
           >
             Services
           </Link>
 
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border border-border/60 text-muted-foreground font-mono font-semibold text-sm sm:text-base text-center hover:border-primary hover:text-primary hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-5 sm:px-8 py-3 rounded-xl border border-border/60 text-muted-foreground font-mono font-semibold text-sm sm:text-base text-center hover:border-primary hover:text-primary hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
           >
             Get in Touch
           </Link>
@@ -128,10 +154,10 @@ const HeroSection = () => {
 
         {/* Social proof */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={socialTransition}
-          className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-10 text-muted-foreground/50 text-xs font-mono uppercase tracking-wider"
+          className="mt-10 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-10 text-muted-foreground/50 text-[11px] sm:text-xs font-mono uppercase tracking-wider"
         >
           <span>15K+ Users Served</span>
           <span className="hidden sm:inline">·</span>
@@ -141,18 +167,20 @@ const HeroSection = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-        className="absolute bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 hidden sm:block"
-        style={{ opacity }}
-        aria-hidden="true"
-      >
-        <div className="w-5 h-8 rounded-full border-2 border-muted-foreground/40 flex items-start justify-center p-1">
-          <div className="w-1 h-2 rounded-full bg-primary" />
-        </div>
-      </motion.div>
+      {/* Scroll indicator – only useful on larger screens */}
+      {!isMobile && (
+        <motion.div
+          animate={prefersReducedMotion ? {} : { y: [0, 8, 0] }}
+          transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="absolute bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 hidden sm:block"
+          style={prefersReducedMotion ? {} : { opacity }}
+          aria-hidden="true"
+        >
+          <div className="w-5 h-8 rounded-full border-2 border-muted-foreground/40 flex items-start justify-center p-1">
+            <div className="w-1 h-2 rounded-full bg-primary" />
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 };

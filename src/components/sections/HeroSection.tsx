@@ -5,6 +5,9 @@ import desktopBg from "@/assets/desktop-bg.jpg";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { ArrowRight, Sparkles } from "lucide-react";
 
+const FULL_TEXT = "I build AI solutions";
+const AFTER_TEXT = " people love to use.";
+
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -16,7 +19,7 @@ const HeroSection = () => {
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-  const { displayed, done } = useTypingEffect("I build AI solutions", 55, 600);
+  const { displayed, done } = useTypingEffect(FULL_TEXT, 55, 600);
 
   return (
     <section ref={ref} id="home" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
@@ -29,53 +32,54 @@ const HeroSection = () => {
       {/* Mesh gradient overlay */}
       <div className="absolute inset-0 bg-mesh pointer-events-none" />
 
-      <motion.div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto" style={{ y: contentY, opacity }}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}>
+      <motion.div
+        className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto"
+        style={{ y: contentY, opacity }}
+      >
+        {/* Use CSS visibility instead of Framer scale animation to prevent CLS */}
+        <div>
 
-          {/* Role badge */}
+          {/* Role badge — no initial layout-shifting animation */}
           <div className="mb-6 sm:mb-8 min-h-[32px] flex items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm"
+            <div
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm animate-fade-in"
             >
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="font-mono text-primary text-[11px] sm:text-xs tracking-widest uppercase">
                 AI Engineer · UX Designer · Researcher
               </span>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Main headline */}
+          {/* Main headline — reserve full space to prevent CLS */}
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em]">
-            {displayed}
-            {!done && <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />}
-            {done &&
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}>
+            <span aria-hidden="true">
+              {displayed}
+              {!done && <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />}
+            </span>
+            {done && (
+              <span className="animate-fade-in">
                 {" "}
                 <span className="text-gradient">people love</span>{" "}
                 to use.
-              </motion.span>
-            }
+              </span>
+            )}
+            {/* Invisible text to reserve layout space and prevent CLS */}
+            <span className="invisible absolute" aria-label={FULL_TEXT + AFTER_TEXT}>
+              {FULL_TEXT}{AFTER_TEXT}
+            </span>
           </h1>
 
-          {/* Tagline — serif accent for consulting elegance */}
+          {/* Tagline */}
           <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-3 leading-relaxed" style={{ fontFamily: "var(--font-serif)" }}>
             Bridging cutting-edge machine learning with human-centered design.
           </p>
           <p className="text-muted-foreground/60 text-sm sm:text-base max-w-xl mx-auto mb-10 sm:mb-12">
             Every model I build is grounded in real user needs — from research to production. 💜
           </p>
-        </motion.div>
+        </div>
 
-        {/* CTA buttons — refined with icons */}
+        {/* CTA buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -112,7 +116,7 @@ const HeroSection = () => {
           </Link>
         </motion.div>
 
-        {/* Social proof / trust strip */}
+        {/* Social proof */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

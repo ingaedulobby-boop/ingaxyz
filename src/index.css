@@ -198,6 +198,13 @@
       transition-duration: 0.2s !important;
     }
   }
+
+  /* Disable parallax transforms on small screens */
+  @media (max-width: 640px) {
+    .hero-parallax-layer {
+      transform: none !important;
+    }
+  }
 }
 
 @layer utilities {

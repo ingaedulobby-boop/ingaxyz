@@ -332,7 +332,7 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
               onKeyDown={handleKeyDown}
               placeholder="Ask me anything..."
               disabled={isLoading}
-              className="flex-1 h-11 px-4 rounded-xl border border-input bg-background text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50" />
+              className="flex-1 h-10 rounded-xl border border-input med-background text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 px-[10px]" />
 
               <Button
               size="icon"

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import heroImg from "@/assets/hero-document.jpg";
+import { useParallax } from "@/hooks/useParallax";
 
 const docLayers = [
   { label: "Invoice #4821", x: "8%", y: "25%", delay: 0, rotate: -3 },
@@ -8,15 +9,18 @@ const docLayers = [
 ];
 
 export default function SmartParserHero() {
+  const { ref, y } = useParallax(0.3);
+
   return (
-    <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
+    <div ref={ref} className="relative h-[50vh] min-h-[400px] overflow-hidden">
       <motion.img
         src={heroImg}
         alt="Smart Document Parser interface"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-[120%] object-cover"
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
+        style={{ y }}
         loading="lazy"
       />
 

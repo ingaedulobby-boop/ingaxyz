@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import heroImg from "@/assets/hero-accessibility.jpg";
+import { useParallax } from "@/hooks/useParallax";
 
 const diagnostics = [
   { label: "Contrast: AAA", color: "text-green-400", x: "12%", y: "22%", delay: 0 },
@@ -9,15 +10,18 @@ const diagnostics = [
 ];
 
 export default function AccessibilityHero() {
+  const { ref, y } = useParallax(0.3);
+
   return (
-    <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
+    <div ref={ref} className="relative h-[50vh] min-h-[400px] overflow-hidden">
       <motion.img
         src={heroImg}
         alt="Accessibility Audit Tool interface"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-[120%] object-cover"
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
+        style={{ y }}
         loading="lazy"
       />
 

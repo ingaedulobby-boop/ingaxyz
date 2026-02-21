@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import heroImg from "@/assets/hero-health.jpg";
+import { useParallax } from "@/hooks/useParallax";
 
 const floatingMetrics = [
   { label: "Heart Rate", value: "72 bpm", x: "10%", y: "20%", delay: 0 },
@@ -9,15 +10,18 @@ const floatingMetrics = [
 ];
 
 export default function AIHealthHero() {
+  const { ref, y } = useParallax(0.3);
+
   return (
-    <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
+    <div ref={ref} className="relative h-[50vh] min-h-[400px] overflow-hidden">
       <motion.img
         src={heroImg}
         alt="AI Health Companion dashboard"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-[120%] object-cover"
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
+        style={{ y }}
         loading="lazy"
       />
       

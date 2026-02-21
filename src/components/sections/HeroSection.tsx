@@ -57,25 +57,35 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 0.6 }}
-          className="flex flex-col sm:flex-row flex-wrap justify-center items-center
-            gap-3 sm:gap-4 px-3 w-full">
+          className="flex flex-row flex-wrap justify-center items-center
+            gap-2 sm:gap-3 px-2 w-full">
 
           <a
             href="#projects"
-            className="w-full sm:w-auto px-8 py-3 rounded-lg bg-primary text-primary-foreground font-mono font-semibold text-center
-                       hover:glow-primary transition-all duration-300 hover:scale-105">
+            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-primary text-primary-foreground font-mono font-medium text-xs sm:text-sm text-center
+                       shadow-[0_2px_0_0_hsl(var(--primary)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
+                       hover:shadow-[0_1px_0_0_hsl(var(--primary)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
+                       hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none
+                       transition-all duration-150">
             View Projects
           </a>
           <a
             href="#services"
-            className="w-full sm:w-auto px-8 py-3 rounded-lg bg-accent text-accent-foreground font-mono font-semibold text-center
-                       hover:glow-accent transition-all duration-300 hover:scale-105">
+            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-accent text-accent-foreground font-mono font-medium text-xs sm:text-sm text-center
+                       shadow-[0_2px_0_0_hsl(var(--accent)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
+                       hover:shadow-[0_1px_0_0_hsl(var(--accent)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
+                       hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none
+                       transition-all duration-150">
             Services
           </a>
           <a
             href="#contact"
-            className="w-full sm:w-auto px-8 py-3 rounded-lg border border-border text-foreground font-mono font-semibold text-center
-                       hover:border-primary hover:text-primary transition-all duration-300">
+            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg border border-border text-foreground font-mono font-medium text-xs sm:text-sm text-center
+                       shadow-[0_2px_0_0_hsl(var(--border)),inset_0_1px_0_0_hsl(0_0%_100%/0.05)]
+                       hover:shadow-[0_1px_0_0_hsl(var(--border)),inset_0_1px_0_0_hsl(0_0%_100%/0.05)]
+                       hover:translate-y-[1px] hover:border-primary hover:text-primary
+                       active:translate-y-[2px] active:shadow-none
+                       transition-all duration-150">
             Get in Touch
           </a>
         </motion.div>

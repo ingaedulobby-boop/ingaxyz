@@ -153,18 +153,18 @@ const HeroSection = () => {
         </motion.div>
 
         {/* Social proof */}
-        <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={socialTransition}
-          className="mt-10 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-10 text-muted-foreground/50 text-[11px] sm:text-xs font-mono uppercase tracking-wider">
+        
 
-          <span>15K+ Users Served</span>
-          <span className="hidden sm:inline">·</span>
-          <span>3 Enterprise Clients</span>
-          <span className="hidden sm:inline">·</span>
-          <span>4.8★ Avg Rating</span>
-        </motion.div>
+
+
+
+
+
+
+
+
+
+
       </motion.div>
 
       {/* Scroll indicator – only useful on larger screens */}

@@ -14,14 +14,18 @@ function loadMessages(): Msg[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored);
-  } catch { /* ignore corrupt data */ }
+  } catch {
+    /* ignore corrupt data */
+  }
   return [];
 }
 
 function saveMessages(msgs: Msg[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
-  } catch { /* storage full or unavailable */ }
+  } catch {
+    /* storage full or unavailable */
+  }
 }
 
 async function streamChat({
@@ -71,7 +75,10 @@ async function streamChat({
       if (!line.startsWith("data: ")) continue;
 
       const json = line.slice(6).trim();
-      if (json === "[DONE]") { streamDone = true; break; }
+      if (json === "[DONE]") {
+        streamDone = true;
+        break;
+      }
 
       try {
         const parsed = JSON.parse(json);
@@ -97,7 +104,9 @@ async function streamChat({
         const parsed = JSON.parse(json);
         const content = parsed.choices?.[0]?.delta?.content as string | undefined;
         if (content) onDelta(content);
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
   }
 
@@ -199,13 +208,7 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
     return text.split("\n").map((line, i) => {
       // Bold
       const formatted = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-      return (
-        <p
-          key={i}
-          className={line.trim() === "" ? "h-2" : ""}
-          dangerouslySetInnerHTML={{ __html: formatted }}
-        />
-      );
+      return <p key={i} className={line.trim() === "" ? "h-2" : ""} dangerouslySetInnerHTML={{ __html: formatted }} />;
     });
   };
 
@@ -223,14 +226,22 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
               : "fixed bottom-16 right-3 z-[60] flex flex-col w-[340px] h-[440px] rounded-2xl border border-transparent bg-card/80 backdrop-blur-xl overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-primary/30"
           }
           style={{
-            ...(!isMobile ? {
-              boxShadow: "0 8px 30px -8px hsl(var(--foreground) / 0.15), 0 2px 8px -3px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--primary-foreground) / 0.05)",
-              transformStyle: "preserve-3d" as const,
-            } : { height: "100svh", paddingBottom: "env(safe-area-inset-bottom)" }),
+            ...(!isMobile
+              ? {
+                  boxShadow:
+                    "0 8px 30px -8px hsl(var(--foreground) / 0.15), 0 2px 8px -3px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--primary-foreground) / 0.05)",
+                  transformStyle: "preserve-3d" as const,
+                }
+              : { height: "100svh", paddingBottom: "env(safe-area-inset-bottom)" }),
           }}
-          whileHover={!isMobile ? {
-            boxShadow: "0 8px 30px -8px hsl(var(--foreground) / 0.15), 0 2px 8px -3px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--primary-foreground) / 0.05), 0 0 20px -4px hsl(var(--primary) / 0.25), 0 0 40px -8px hsl(var(--primary) / 0.12)",
-          } : undefined}
+          whileHover={
+            !isMobile
+              ? {
+                  boxShadow:
+                    "0 8px 30px -8px hsl(var(--foreground) / 0.15), 0 2px 8px -3px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--primary-foreground) / 0.05), 0 0 20px -4px hsl(var(--primary) / 0.25), 0 0 40px -8px hsl(var(--primary) / 0.12)",
+                }
+              : undefined
+          }
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-window-header/60 backdrop-blur-md shrink-0">
@@ -244,19 +255,16 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                  onClick={() => { setMessages([]); localStorage.removeItem(STORAGE_KEY); }}
+                  onClick={() => {
+                    setMessages([]);
+                    localStorage.removeItem(STORAGE_KEY);
+                  }}
                   aria-label="Clear chat history"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </Button>
               )}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={onClose}
-                aria-label="Close chat"
-              >
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose} aria-label="Close chat">
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -277,10 +285,7 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
             )}
 
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-              >
+              <div key={i} className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.role === "assistant" && (
                   <div className="shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
                     <Bot className="w-3.5 h-3.5 text-primary" />

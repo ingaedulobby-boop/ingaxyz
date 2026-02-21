@@ -244,7 +244,7 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
         }>
 
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-window-header/60 backdrop-blur-md shrink-0">
+          <div className="flex items-center justify-between border-b border-border bg-window-header/60 backdrop-blur-md shrink-0 px-[11px] py-[9px]">
             <div className="flex items-center gap-2">
               <Bot className="w-4 h-4 text-primary" />
               <span className="text-xs font-mono tracking-wide text-primary">FAQai</span>

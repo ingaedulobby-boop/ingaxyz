@@ -25,9 +25,14 @@ export default function WindowPanel({
 }: WindowPanelProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const { minimizeWindow, restoreWindow, isMinimized } = useWindowManager();
 
-  const minimized = isMinimized(id);
+  // Safe context fallback
+  const windowManager = useWindowManager?.();
+  const minimizeWindow = windowManager?.minimizeWindow;
+  const restoreWindow = windowManager?.restoreWindow;
+  const isMinimized = windowManager?.isMinimized;
+
+  const minimized = isMinimized ? isMinimized(id) : false;
 
   const [isMaximized, setIsMaximized] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
@@ -36,18 +41,18 @@ export default function WindowPanel({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // =============================
-  // Simple Drag (Lovable Safe)
+  // Drag (Stable)
   // =============================
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const springX = useSpring(x, { stiffness: 250, damping: 30 });
-  const springY = useSpring(y, { stiffness: 250, damping: 30 });
+  const springX = useSpring(x, { stiffness: 260, damping: 28 });
+  const springY = useSpring(y, { stiffness: 260, damping: 28 });
 
   const canDrag = draggable && !isMobile && !isMaximized;
 
   // =============================
-  // ESC Key Support
+  // ESC Support
   // =============================
   useEffect(() => {
     if (!isFocused) return;
@@ -71,21 +76,25 @@ export default function WindowPanel({
     <motion.section
       ref={containerRef}
       id={id}
+      role="region"
+      aria-labelledby={`${id}-title`}
       tabIndex={0}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       drag={canDrag}
       dragMomentum={false}
+      dragElastic={0.05}
+      dragConstraints={containerRef}
       style={{
-        x: canDrag ? springX : undefined,
-        y: canDrag ? springY : undefined,
+        x: canDrag ? springX : 0,
+        y: canDrag ? springY : 0,
       }}
       initial={prefersReducedMotion ? false : { opacity: 0, y: 40, scale: 0.98 }}
       animate={{
         opacity: minimized ? 0 : 1,
-        scale: minimized ? 0.95 : 1,
+        scale: minimized ? 0.96 : 1,
       }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
       className={clsx(
         "relative w-full rounded-2xl border border-border bg-card/90 backdrop-blur-xl overflow-hidden",
         "transition-all duration-300 outline-none",
@@ -102,20 +111,23 @@ export default function WindowPanel({
         )}
       >
         <div className="flex items-center gap-3">
-          {/* Window Controls */}
           <div className="flex gap-2">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsClosed(true);
               }}
+              aria-label="Close window"
               className="w-3 h-3 rounded-full bg-destructive hover:opacity-80"
             />
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                minimized ? restoreWindow(id) : minimizeWindow(id, title);
+                if (!minimizeWindow) return;
+
+                minimized ? restoreWindow?.(id) : minimizeWindow(id, title);
               }}
+              aria-label="Minimize window"
               className="w-3 h-3 rounded-full bg-yellow-400 hover:opacity-80"
             />
             <button
@@ -123,24 +135,26 @@ export default function WindowPanel({
                 e.stopPropagation();
                 setIsMaximized((v) => !v);
               }}
+              aria-label="Maximize window"
               className="w-3 h-3 rounded-full bg-green-500 hover:opacity-80"
             />
           </div>
 
-          <h2 className={clsx("text-xs font-mono tracking-wide truncate", accentColor)}>{title}</h2>
+          <h2 id={`${id}-title`} className={clsx("text-xs font-mono tracking-wide truncate", accentColor)}>
+            {title}
+          </h2>
         </div>
       </div>
 
       {/* Content */}
       <motion.div
         animate={{
-          height: minimized ? 0 : "auto",
           opacity: minimized ? 0 : 1,
         }}
-        transition={{ duration: 0.3 }}
-        className="overflow-hidden"
+        transition={{ duration: 0.25 }}
+        className={clsx("overflow-hidden", minimized && "pointer-events-none")}
       >
-        <div className="p-6 text-sm sm:text-base">{children}</div>
+        {!minimized && <div className="p-6 text-sm sm:text-base">{children}</div>}
       </motion.div>
     </motion.section>
   );

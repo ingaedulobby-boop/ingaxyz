@@ -20,11 +20,12 @@ type CarouselProps = {
 type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
   api: ReturnType<typeof useEmblaCarousel>[1];
+  orientation: "horizontal" | "vertical";
   scrollPrev: () => void;
   scrollNext: () => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
-} & CarouselProps;
+};
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
 
@@ -69,15 +70,25 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          scrollPrev();
-        } else if (event.key === "ArrowRight") {
-          event.preventDefault();
-          scrollNext();
+        if (orientation === "horizontal") {
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            scrollPrev();
+          } else if (event.key === "ArrowRight") {
+            event.preventDefault();
+            scrollNext();
+          }
+        } else {
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            scrollPrev();
+          } else if (event.key === "ArrowDown") {
+            event.preventDefault();
+            scrollNext();
+          }
         }
       },
-      [scrollPrev, scrollNext],
+      [orientation, scrollPrev, scrollNext],
     );
 
     React.useEffect(() => {
@@ -98,7 +109,8 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
       api.on("select", onSelect);
 
       return () => {
-        api?.off("select", onSelect);
+        api.off("select", onSelect);
+        api.off("reInit", onSelect);
       };
     }, [api, onSelect]);
 
@@ -106,9 +118,8 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
       <CarouselContext.Provider
         value={{
           carouselRef,
-          api: api,
-          opts,
-          orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+          api,
+          orientation,
           scrollPrev,
           scrollNext,
           canScrollPrev,

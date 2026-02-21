@@ -30,21 +30,23 @@ const HeroSection = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}>
 
-          {/* Role badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm mb-6 sm:mb-8"
-          >
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-mono text-primary text-[11px] sm:text-xs tracking-widest uppercase">
-              AI Engineer · UX Designer · Researcher
-            </span>
-          </motion.div>
+          {/* Role badge — reserve space to prevent CLS */}
+          <div className="mb-6 sm:mb-8 min-h-[32px] flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm"
+            >
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="font-mono text-primary text-[11px] sm:text-xs tracking-widest uppercase">
+                AI Engineer · UX Designer · Researcher
+              </span>
+            </motion.div>
+          </div>
 
-          {/* Main headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6">
+          {/* Main headline — reserve min-height to prevent CLS from typing effect */}
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em]">
             {displayed}
             {!done && <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />}
             {done &&

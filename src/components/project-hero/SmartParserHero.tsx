@@ -1,6 +1,101 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParallax } from "@/hooks/useParallax";
+
+// Generate a deterministic neural network graph
+function generateNetwork(nodeCount: number, seed: number) {
+  const nodes: { x: number; y: number }[] = [];
+  for (let i = 0; i < nodeCount; i++) {
+    const angle = (i / nodeCount) * Math.PI * 2 + seed;
+    const radius = 120 + ((i * 37 + seed * 13) % 80);
+    nodes.push({
+      x: 250 + Math.cos(angle) * radius + ((i * 23) % 40) - 20,
+      y: 200 + Math.sin(angle) * radius + ((i * 17) % 30) - 15,
+    });
+  }
+  const edges: { from: number; to: number }[] = [];
+  for (let i = 0; i < nodeCount; i++) {
+    for (let j = i + 1; j < nodeCount; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      if (Math.sqrt(dx * dx + dy * dy) < 160) {
+        edges.push({ from: i, to: j });
+      }
+    }
+  }
+  return { nodes, edges };
+}
+
+function NeuralNetworkSVG() {
+  const prefersReduced = useReducedMotion();
+  const { nodes, edges } = useMemo(() => generateNetwork(14, 3), []);
+
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.12]"
+      viewBox="0 0 500 400"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      {edges.map((e, i) => (
+        <motion.line
+          key={`e${i}`}
+          x1={nodes[e.from].x}
+          y1={nodes[e.from].y}
+          x2={nodes[e.to].x}
+          y2={nodes[e.to].y}
+          stroke="rgb(139,92,246)"
+          strokeWidth={0.8}
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{
+            duration: prefersReduced ? 0 : 1.5,
+            delay: prefersReduced ? 0 : 0.5 + i * 0.04,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+      {nodes.map((n, i) => (
+        <motion.circle
+          key={`n${i}`}
+          cx={n.x}
+          cy={n.y}
+          r={2.5}
+          fill="rgb(34,211,238)"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={prefersReduced ? { scale: 1, opacity: 1 } : {
+            scale: [0, 1.3, 1],
+            opacity: [0, 1, 0.8],
+          }}
+          transition={{
+            duration: prefersReduced ? 0 : 0.6,
+            delay: prefersReduced ? 0 : 0.3 + i * 0.06,
+          }}
+        />
+      ))}
+      {/* Pulse traveling along a few edges */}
+      {!prefersReduced && edges.slice(0, 5).map((e, i) => (
+        <motion.circle
+          key={`p${i}`}
+          r={1.5}
+          fill="rgb(34,211,238)"
+          initial={{ opacity: 0 }}
+          animate={{
+            cx: [nodes[e.from].x, nodes[e.to].x],
+            cy: [nodes[e.from].y, nodes[e.to].y],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: 3,
+            delay: 2 + i * 1.2,
+            repeat: Infinity,
+            repeatDelay: 4,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </svg>
+  );
+}
 
 const files = [
   { name: "Invoice #4821", type: "PDF" },
@@ -61,6 +156,9 @@ export default function SmartParserHero() {
     >
       {/* Grid overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
+      {/* Neural network background */}
+      <NeuralNetworkSVG />
 
       {/* Radial glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />

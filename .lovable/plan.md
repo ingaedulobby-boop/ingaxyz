@@ -1,56 +1,62 @@
 
-
-# Upgrade AIHealthHero to 3D Glassmorphism Dashboard
+# Upgrade SmartParserHero to Enterprise 3D Glassmorphism Dashboard
 
 ## Summary
-Replace the current image-based AIHealthHero with a fully animated, interactive 3D dashboard component. This creates a cyber-glassmorphism aesthetic with mouse-driven tilt, floating metric cards with pulse animations, a radial glow aura, and stat cards at the bottom -- all built with Framer Motion and Tailwind, no external images needed.
+Replace the image-based SmartParserHero with an interactive, enterprise-grade ML control panel. This creates a structured, industrial aesthetic with a file list panel, animated confidence heatmap, OCR scanning line, grid overlay, and stat cards -- all inline with Framer Motion and Tailwind. Deliberately contrasts the soft/empathetic Health Companion with a powerful, data-dense feel.
+
+## Visual Design Direction
+- Dark industrial palette (`from-slate-900 to-slate-950`) matching Health Companion container style
+- Glassmorphism main card (`backdrop-blur-xl bg-white/5 border-white/10`) with a subtle violet/cyan enterprise glow
+- Subtle grid overlay (`bg-[linear-gradient(...)]`) for ML lab atmosphere
+- Color palette: emerald (high confidence), cyan (accuracy), purple (enterprise), amber (throughput)
+- No external images -- fully self-contained
 
 ## What Changes
 
-### 1. Rewrite `src/components/project-hero/AIHealthHero.tsx`
+### 1. Rewrite `src/components/project-hero/SmartParserHero.tsx`
 
-Replace the current image + floating labels approach with an inline 3D dashboard visual:
+**Layout (two-column on desktop, stacked on mobile):**
+- Left panel: File list with 3 document items (Invoice, Contract, Report). Each has hover highlight animation with a `layoutId` shared element for the active indicator bar
+- Right panel: Confidence heatmap -- 3 extraction fields (Invoice Total 96%, Vendor Name 88%, Due Date 73%) with animated width bars color-coded by confidence level (green > 90%, amber > 80%, red otherwise)
 
-**New features:**
-- Mouse-position-driven 3D tilt (rotateX/rotateY) with perspective, disabled on mobile and reduced-motion
-- Central glassmorphism dashboard card with `backdrop-blur-xl bg-white/5 border-white/10` styling
-- Animated radial cyan glow behind the card (`shadow-[0_0_80px_rgba(34,211,238,0.25)]`)
-- Four health metric rows inside the card with color-coded labels (cyan, green, yellow, rose) and staggered fade-in
-- Four stat cards at the bottom (+72%, 4.8 star, 15K+, 38%) with hover lift effect
-- Animated pulse ring behind the dashboard (existing behavior, improved)
-- Parallax still applied to the outer container via the existing `useParallax` hook
+**Bottom section: 4 stat cards**
+- Processing Time: -90% (emerald)
+- Extraction Accuracy: 96% (cyan)
+- Enterprise Clients: 3 (purple)
+- Documents/Day: 2,000+ (amber)
+- Hover lift effect (`whileHover={{ y: -4 }}`)
 
-**Visual design:**
-- Dark gradient background (`from-slate-900 to-slate-950`) that works in both themes
-- Glass panel: `rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10`
-- Metric colors: Heart Rate = cyan-400, SpO2 = green-400, Sleep = yellow-400, Stress = rose-400
-- Stat cards: same color mapping, `bg-slate-800/80 backdrop-blur` with shadow
+**OCR scanning line (preserved):**
+- Horizontal gradient line animating vertically across the component, same as current but on the glassmorphism card
 
-**Animation details:**
-- Dashboard card: `initial={{ opacity: 0, scale: 0.9 }}` -> `animate={{ opacity: 1, scale: 1 }}` with spring
-- Each metric row: staggered `delay: i * 0.15`, fade + slide from left
-- Stat cards: staggered `delay: 0.8 + i * 0.1`, scale from 0.9
-- Tilt: calculated from mouse position relative to container center, divided by 25 for subtlety
-- Tilt resets to `{ x: 0, y: 0 }` on mouse leave with spring transition
-- All motion disabled when `prefers-reduced-motion` is active
+**Grid overlay:**
+- Absolute-positioned div with CSS linear-gradient grid pattern at 40px spacing, low opacity, for industrial texture
+
+**Animations:**
+- Main card: fade + slide up from `y: 40`, spring transition
+- File items: staggered fade-in with `delay: i * 0.1`
+- Heatmap bars: animate width from 0 to confidence percentage over 1.2s with staggered delays
+- Stat cards: staggered scale from 0.9, same pattern as Health Companion
+- All gated by `useReducedMotion` -- skips delays and complex motion when active
+
+**Mouse-driven 3D tilt:**
+- Same pattern as AIHealthHero: `rotateX`/`rotateY` from mouse position, `perspective(1000px)`, disabled on mobile and reduced-motion
+- Applied to the main glassmorphism card
 
 **Responsive behavior:**
-- On mobile (< 768px): tilt disabled, stat cards stack 2x2, metrics use smaller text
-- Dashboard card max-width constrained (`max-w-lg`) and centered
-- Container keeps `h-[50vh] min-h-[400px]` to match other project heroes
+- Mobile (< 768px): single column layout, tilt disabled, smaller text, 2x2 stat grid
+- Desktop: two-column file list + heatmap, 4-column stats
+- Container keeps `h-[50vh] min-h-[400px]` to match other heroes
 
-### 2. No other files change
-
-- `useParallax` hook already works correctly
-- `ProjectDetail.tsx` already imports and renders `AIHealthHero`
-- No new dependencies needed (Framer Motion already installed)
-- Dark/light theme compatible via CSS variable colors + explicit dark palette on the hero
+**Integration:**
+- Keeps `useParallax(0.3)` on outer container for scroll parallax
+- No changes to any other files
+- No new dependencies
 
 ## Technical Details
-
-- Removes dependency on `hero-health.jpg` image for this component (image file stays in assets for other potential uses)
-- Uses `useState` for tilt tracking, `onMouseMove` / `onMouseLeave` on the outer container
-- Mobile detection via `window.innerWidth < 768` with resize listener (same pattern as existing components)
+- Removes dependency on `hero-document.jpg` image (file stays in assets)
+- Uses `useState` for tilt and hovered file index
+- Mobile detection via `window.innerWidth < 768` + resize listener
 - `useReducedMotion()` from Framer Motion gates all animation
-- The `useParallax` hook is still called and applied to the container for scroll-driven parallax on the whole section
-
+- File hover uses `onHoverStart`/`onHoverEnd` from Framer Motion
+- Heatmap bar colors computed inline based on confidence threshold

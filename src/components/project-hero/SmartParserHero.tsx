@@ -29,6 +29,7 @@ function NeuralNetworkSVG() {
 
   return (
     <svg
+      aria-hidden="true"
       className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.12]"
       viewBox="0 0 500 400"
       preserveAspectRatio="xMidYMid slice"

@@ -27,7 +27,7 @@ function NeuralNetworkSVG() {
   const prefersReduced = useReducedMotion();
   const { nodes, edges } = useMemo(() => generateNetwork(12, 7), []);
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.10]" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
+    <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.10]" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
       {edges.map((e, i) => (
         <motion.line key={`e${i}`} x1={nodes[e.from].x} y1={nodes[e.from].y} x2={nodes[e.to].x} y2={nodes[e.to].y} stroke="rgb(34,211,238)" strokeWidth={0.7}
           initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}

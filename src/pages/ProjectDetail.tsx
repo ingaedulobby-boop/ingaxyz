@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
@@ -9,7 +10,7 @@ import AccessibilityHero from "@/components/project-hero/AccessibilityHero";
 
 const SITE_URL = "https://ingaxyz.lovable.app";
 
-const heroComponents: Record<string, React.ComponentType> = {
+const heroComponents: Record<string, ComponentType> = {
   "ai-health-companion": AIHealthHero,
   "smart-document-parser": SmartParserHero,
   "accessibility-audit-tool": AccessibilityHero,

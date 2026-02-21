@@ -1,62 +1,58 @@
 
-# Upgrade SmartParserHero to Enterprise 3D Glassmorphism Dashboard
 
-## Summary
-Replace the image-based SmartParserHero with an interactive, enterprise-grade ML control panel. This creates a structured, industrial aesthetic with a file list panel, animated confidence heatmap, OCR scanning line, grid overlay, and stat cards -- all inline with Framer Motion and Tailwind. Deliberately contrasts the soft/empathetic Health Companion with a powerful, data-dense feel.
+# Plan: SmartParserHero Keyboard Accessibility + Chat Endpoint Security
 
-## Visual Design Direction
-- Dark industrial palette (`from-slate-900 to-slate-950`) matching Health Companion container style
-- Glassmorphism main card (`backdrop-blur-xl bg-white/5 border-white/10`) with a subtle violet/cyan enterprise glow
-- Subtle grid overlay (`bg-[linear-gradient(...)]`) for ML lab atmosphere
-- Color palette: emerald (high confidence), cyan (accuracy), purple (enterprise), amber (throughput)
-- No external images -- fully self-contained
+## Part 1: SmartParserHero File List Keyboard-Focusable Metadata
 
-## What Changes
+Add metadata details to each file item that expand on hover AND keyboard focus, matching the AccessibilityHero pattern.
 
-### 1. Rewrite `src/components/project-hero/SmartParserHero.tsx`
+### Changes to `src/components/project-hero/SmartParserHero.tsx`
 
-**Layout (two-column on desktop, stacked on mobile):**
-- Left panel: File list with 3 document items (Invoice, Contract, Report). Each has hover highlight animation with a `layoutId` shared element for the active indicator bar
-- Right panel: Confidence heatmap -- 3 extraction fields (Invoice Total 96%, Vendor Name 88%, Due Date 73%) with animated width bars color-coded by confidence level (green > 90%, amber > 80%, red otherwise)
+**1. Update the `files` data array** to include metadata fields:
+```
+{ name: "Invoice #4821", type: "PDF", pages: 3, size: "1.2 MB", extracted: "12 fields" }
+{ name: "Contract_v2.pdf", type: "PDF", pages: 18, size: "4.7 MB", extracted: "34 fields" }
+{ name: "Report_Q4.docx", type: "DOCX", pages: 9, size: "2.1 MB", extracted: "21 fields" }
+```
 
-**Bottom section: 4 stat cards**
-- Processing Time: -90% (emerald)
-- Extraction Accuracy: 96% (cyan)
-- Enterprise Clients: 3 (purple)
-- Documents/Day: 2,000+ (amber)
-- Hover lift effect (`whileHover={{ y: -4 }}`)
+**2. Update each file list `motion.div`** to add:
+- `tabIndex={0}`, `role="button"`, and `focus:ring-1 focus:ring-cyan-400/40 focus:outline-none`
+- Add `focus-within` variants alongside existing hover styles for border/background changes
+- Add an expandable metadata row using the same `max-h-0 -> max-h-12` pattern with `group-hover` AND `group-focus-within` triggers
+- Metadata shows: pages, file size, extracted fields count in a compact mono layout
 
-**OCR scanning line (preserved):**
-- Horizontal gradient line animating vertically across the component, same as current but on the glassmorphism card
+---
 
-**Grid overlay:**
-- Absolute-positioned div with CSS linear-gradient grid pattern at 40px spacing, low opacity, for industrial texture
+## Part 2: Chat Endpoint Security Hardening
 
-**Animations:**
-- Main card: fade + slide up from `y: 40`, spring transition
-- File items: staggered fade-in with `delay: i * 0.1`
-- Heatmap bars: animate width from 0 to confidence percentage over 1.2s with staggered delays
-- Stat cards: staggered scale from 0.9, same pattern as Health Companion
-- All gated by `useReducedMotion` -- skips delays and complex motion when active
+The current chat edge function has no rate limiting or input validation. Anyone can inspect the anon key from client-side code and call the endpoint directly at scale. The fix adds server-side rate limiting and input sanitization.
 
-**Mouse-driven 3D tilt:**
-- Same pattern as AIHealthHero: `rotateX`/`rotateY` from mouse position, `perspective(1000px)`, disabled on mobile and reduced-motion
-- Applied to the main glassmorphism card
+### Changes to `supabase/functions/chat/index.ts`
 
-**Responsive behavior:**
-- Mobile (< 768px): single column layout, tilt disabled, smaller text, 2x2 stat grid
-- Desktop: two-column file list + heatmap, 4-column stats
-- Container keeps `h-[50vh] min-h-[400px]` to match other heroes
+**1. Add IP-based in-memory rate limiting:**
+- Track requests per IP using a Map with timestamps
+- Limit to 10 requests per minute per IP
+- Clean up expired entries periodically
+- Return 429 with clear error message when exceeded
 
-**Integration:**
-- Keeps `useParallax(0.3)` on outer container for scroll parallax
-- No changes to any other files
-- No new dependencies
+**2. Add input validation:**
+- Validate that `messages` is an array with max 50 entries
+- Validate each message has `role` (user/assistant only) and `content` (string, max 2000 chars)
+- Strip any `system` role messages from user input (prevent prompt injection)
+- Return 400 with error for invalid input
 
-## Technical Details
-- Removes dependency on `hero-document.jpg` image (file stays in assets)
-- Uses `useState` for tilt and hovered file index
-- Mobile detection via `window.innerWidth < 768` + resize listener
-- `useReducedMotion()` from Framer Motion gates all animation
-- File hover uses `onHoverStart`/`onHoverEnd` from Framer Motion
-- Heatmap bar colors computed inline based on confidence threshold
+**3. Add `verify_jwt = false` to config.toml** for the chat function (it's a public endpoint but we validate in code).
+
+### Changes to `src/components/AIChatWindow.tsx`
+
+**No changes needed** -- the client already sends the anon key as Authorization header which is required by the edge function gateway. The security improvements are all server-side.
+
+### Security Summary
+
+| Threat | Mitigation |
+|--------|-----------|
+| Direct endpoint abuse | IP-based rate limiting (10 req/min) |
+| Prompt injection via system role | Strip system messages from user input |
+| Oversized payloads | Message count limit (50) and content length limit (2000 chars) |
+| Bot spam | Rate limiting + input validation |
+

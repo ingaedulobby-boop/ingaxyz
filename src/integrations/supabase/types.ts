@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_rate_limits: {
+        Row: {
+          ip_address: string
+          request_timestamps: string[]
+        }
+        Insert: {
+          ip_address: string
+          request_timestamps?: string[]
+        }
+        Update: {
+          ip_address?: string
+          request_timestamps?: string[]
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -49,7 +64,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_chat_rate_limit: {
+        Args: {
+          p_ip: string
+          p_max_requests?: number
+          p_window_seconds?: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

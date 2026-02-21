@@ -1,34 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
-
-// --- Rate Limiting ---
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX = 10;
-const ipRequests = new Map<string, number[]>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = ipRequests.get(ip)?.filter((t) => now - t < RATE_LIMIT_WINDOW_MS) ?? [];
-  ipRequests.set(ip, timestamps);
-  if (timestamps.length >= RATE_LIMIT_MAX) return true;
-  timestamps.push(now);
-  return false;
-}
-
-// Periodic cleanup every 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, timestamps] of ipRequests) {
-    const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (valid.length === 0) ipRequests.delete(ip);
-    else ipRequests.set(ip, valid);
-  }
-}, 300_000);
 
 // --- Input Validation ---
 const ALLOWED_ROLES = new Set(["user", "assistant"]);
@@ -51,7 +28,6 @@ function validateMessages(raw: unknown): { valid: true; messages: ChatMessage[] 
     if (typeof role !== "string" || typeof content !== "string") {
       return { valid: false, error: "Each message must have string role and content" };
     }
-    // Strip system role messages (prevent prompt injection)
     if (role === "system") continue;
     if (!ALLOWED_ROLES.has(role)) return { valid: false, error: `Invalid role: ${role}` };
     if (content.length > MAX_CONTENT_LENGTH) {
@@ -92,10 +68,21 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Rate limiting by IP
+  // Rate limiting via database
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     req.headers.get("cf-connecting-ip") || "unknown";
-  if (isRateLimited(ip)) {
+
+  const supabaseAdmin = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+
+  const { data: allowed, error: rlError } = await supabaseAdmin.rpc("check_chat_rate_limit", { p_ip: ip });
+
+  if (rlError) {
+    console.error("Rate limit check error:", rlError);
+    // Fail open on DB errors to not block legitimate users
+  } else if (allowed === false) {
     return new Response(
       JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
       { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -105,7 +92,6 @@ serve(async (req) => {
   try {
     const body = await req.json();
 
-    // Validate input
     const result = validateMessages(body.messages);
     if (!result.valid) {
       return new Response(

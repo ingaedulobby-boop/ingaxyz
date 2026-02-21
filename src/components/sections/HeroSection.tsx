@@ -13,7 +13,7 @@ const HeroSection = () => {
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end start"]
   });
 
   const prefersReducedMotion = useReducedMotion();
@@ -32,8 +32,8 @@ const HeroSection = () => {
       ref={ref}
       id="home"
       aria-label="Inga portfolio hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white"
-    >
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
+
       {/* Background */}
       <motion.div className="absolute inset-0 -z-10" style={prefersReducedMotion ? {} : { y: bgY }} aria-hidden="true">
         <img src={desktopBg} alt="" className="h-full w-full object-cover opacity-15 scale-110" />
@@ -48,8 +48,8 @@ const HeroSection = () => {
       {/* Content */}
       <motion.div
         className="relative z-10 w-full max-w-4xl mx-auto px-6 py-24 text-center"
-        style={prefersReducedMotion ? {} : { y: contentY, opacity }}
-      >
+        style={prefersReducedMotion ? {} : { y: contentY, opacity }}>
+
         {/* Role Badge */}
         <div className="mb-8 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 backdrop-blur-md">
@@ -67,15 +67,15 @@ const HeroSection = () => {
             {!done && <span className="inline-block w-[3px] h-[1em] bg-primary ml-1 animate-pulse align-middle" />}
           </span>
 
-          {done && (
-            <span className="animate-fade-in">
+          {done &&
+          <span className="animate-fade-in">
               {" "}
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                 people love
               </span>{" "}
               to use.
             </span>
-          )}
+          }
 
           {/* Invisible spacer to prevent layout shift */}
           <span className="invisible absolute inset-0 pointer-events-none">
@@ -98,13 +98,13 @@ const HeroSection = () => {
           initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: ctaDelay, duration: 0.6 }}
-          className="flex flex-col sm:flex-row justify-center items-center gap-4"
-        >
+          className="flex flex-col sm:flex-row justify-center items-center gap-3">
+
           {/* Projects */}
           <Link
             to="/projects"
-            className="group inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
-          >
+            className="group inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+
             <Sparkles className="w-4 h-4" />
             View Projects
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -113,22 +113,22 @@ const HeroSection = () => {
           {/* Services */}
           <Link
             to="/services"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md font-mono font-semibold transition-all duration-200 hover:bg-white/20 hover:-translate-y-1"
-          >
+            className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md font-mono font-semibold transition-all duration-200 hover:bg-white/20 hover:-translate-y-1">
+
             Services
           </Link>
 
           {/* Contact */}
           <Link
             to="/contact"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl border border-primary text-primary font-mono font-semibold transition-all duration-200 hover:bg-primary/10 hover:-translate-y-1"
-          >
+            className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl border border-primary text-primary font-mono font-semibold transition-all duration-200 hover:bg-primary/10 hover:-translate-y-1">
+
             Get in Touch
           </Link>
         </motion.div>
       </motion.div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default HeroSection;

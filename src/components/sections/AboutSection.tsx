@@ -1,8 +1,9 @@
 import WindowPanel from "@/components/WindowPanel";
 import SectionHeader from "@/components/SectionHeader";
 import { Brain, Palette, Search, Code, Figma, BarChart3 } from "lucide-react";
-import StaggerChildren, { staggerItem } from "@/components/StaggerChildren";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const skills = [
   { icon: Brain, label: "Machine Learning", desc: "TensorFlow, PyTorch, scikit-learn" },
@@ -12,6 +13,36 @@ const skills = [
   { icon: Search, label: "User Research", desc: "Usability testing, A/B experiments" },
   { icon: BarChart3, label: "Data Analysis", desc: "Metrics, insights, data-driven design" },
 ];
+
+function SkillCard({ icon: Icon, label, desc, index }: { icon: typeof Brain; label: string; desc: string; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  // Each card floats at a slightly different rate for depth
+  const offset = 8 + (index % 3) * 6;
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [offset, 0, -offset]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      style={isMobile ? undefined : { y }}
+      className="p-3 sm:p-4 rounded-lg bg-secondary/50 border border-border 
+                 hover:border-primary/30 active:border-primary/40 transition-colors will-change-transform"
+    >
+      <Icon className="w-5 h-5 text-primary mb-2" />
+      <p className="font-mono text-xs sm:text-sm font-semibold text-foreground">{label}</p>
+      <p className="text-xs text-muted-foreground mt-1">{desc}</p>
+    </motion.div>
+  );
+}
 
 const AboutSection = () => {
   return (
@@ -31,20 +62,11 @@ const AboutSection = () => {
             The result? AI that isn't just smart—it's usable, delightful, and grounded in real human needs.
           </p>
         </div>
-        <StaggerChildren className="grid grid-cols-1 xs:grid-cols-2 gap-3">
-          {skills.map(({ icon: Icon, label, desc }) => (
-            <motion.div
-              key={label}
-              variants={staggerItem}
-              className="p-3 sm:p-4 rounded-lg bg-secondary/50 border border-border 
-                         hover:border-primary/30 active:border-primary/40 transition-colors"
-            >
-              <Icon className="w-5 h-5 text-primary mb-2" />
-              <p className="font-mono text-xs sm:text-sm font-semibold text-foreground">{label}</p>
-              <p className="text-xs text-muted-foreground mt-1">{desc}</p>
-            </motion.div>
+        <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
+          {skills.map(({ icon, label, desc }, i) => (
+            <SkillCard key={label} icon={icon} label={label} desc={desc} index={i} />
           ))}
-        </StaggerChildren>
+        </div>
       </div>
     </WindowPanel>
   );

@@ -125,10 +125,10 @@ export default function WindowPanel({
       dragSnapToOrigin={false}
       onDragEnd={canDrag ? handleDragEnd : undefined}
       onMouseDown={() => setIsFocused(true)}
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
-      whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 50, scale: 0.97 }}
+      whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: false, amount: 0.15, margin: "-60px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={minimized ? { scale: 0.8, opacity: 0, height: 0, marginBottom: 0, overflow: "hidden" } : { scale: 1, opacity: 1, height: "auto" }}

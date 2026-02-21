@@ -67,6 +67,12 @@ const HeroSection = () => {
             View Projects
           </a>
           <a
+            href="#services"
+            className="w-full sm:w-auto px-8 py-3 rounded-lg bg-accent text-accent-foreground font-mono font-semibold text-center
+                       hover:glow-accent transition-all duration-300 hover:scale-105">
+            Services
+          </a>
+          <a
             href="#contact"
             className="w-full sm:w-auto px-8 py-3 rounded-lg border border-border text-foreground font-mono font-semibold text-center
                        hover:border-primary hover:text-primary transition-all duration-300">

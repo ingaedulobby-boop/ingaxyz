@@ -220,7 +220,7 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
           className={
             isMobile
               ? "fixed inset-0 z-[60] flex flex-col bg-background"
-              : "fixed bottom-16 right-3 z-[60] flex flex-col w-[340px] h-[440px] rounded-2xl border border-border bg-card/80 backdrop-blur-xl overflow-hidden"
+              : "fixed bottom-16 right-3 z-[60] flex flex-col w-[340px] h-[440px] rounded-2xl border border-transparent bg-card/80 backdrop-blur-xl overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-primary/30"
           }
           style={{
             ...(!isMobile ? {
@@ -228,7 +228,9 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
               transformStyle: "preserve-3d" as const,
             } : { height: "100svh", paddingBottom: "env(safe-area-inset-bottom)" }),
           }}
-          
+          whileHover={!isMobile ? {
+            boxShadow: "0 8px 30px -8px hsl(var(--foreground) / 0.15), 0 2px 8px -3px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--primary-foreground) / 0.05), 0 0 20px -4px hsl(var(--primary) / 0.25), 0 0 40px -8px hsl(var(--primary) / 0.12)",
+          } : undefined}
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-window-header/60 backdrop-blur-md shrink-0">

@@ -21,24 +21,41 @@ export default function BlogPage() {
     <>
       <Helmet>
         <title>Blog — Inga Kali | AI & Design Insights</title>
-        <meta name="description" content="Latest thoughts on AI engineering, UX design, and the intersection of technology and human experience." />
+
+        <meta
+          name="description"
+          content="Latest thoughts on AI engineering, UX design, and the intersection of technology and human experience."
+        />
+
         <link rel="canonical" href={`${SITE_URL}/blog`} />
 
-        <meta property="og:type" content="blog" />
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
         <meta property="og:url" content={`${SITE_URL}/blog`} />
         <meta property="og:title" content="Blog — Inga Kali | AI & Design Insights" />
-        <meta property="og:description" content="Thoughts on AI engineering, UX design, and human-centered technology." />
+        <meta
+          property="og:description"
+          content="Thoughts on AI engineering, UX design, and human-centered technology."
+        />
         <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
 
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Blog — Inga Kali" />
         <meta name="twitter:description" content="AI engineering, UX design, and human-centered technology insights." />
 
-        <script type="application/ld+json">{JSON.stringify(blogJsonLd)}</script>
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(blogJsonLd),
+          }}
+        />
       </Helmet>
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-20">
+
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-20">
         <BlogSection />
-      </div>
+      </main>
     </>
   );
 }

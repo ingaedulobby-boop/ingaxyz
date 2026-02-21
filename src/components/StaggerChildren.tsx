@@ -1,32 +1,32 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { ReactNode } from "react";
 
-interface StaggerChildrenProps {
+interface Props {
   children: ReactNode;
   className?: string;
-  staggerDelay?: number;
+  stagger?: number;
 }
 
-const container = (stagger: number) => ({
-  hidden: {},
-  show: { transition: { staggerChildren: stagger } },
-});
-
-export const staggerItem = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+export const staggerItem: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
 };
 
-const StaggerChildren = ({ children, className = "", staggerDelay = 0.12 }: StaggerChildrenProps) => (
-  <motion.div
-    variants={container(staggerDelay)}
-    initial="hidden"
-    whileInView="show"
-    viewport={{ once: true, margin: "-40px" }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+export default function StaggerChildren({ children, className = "", stagger = 0.1 }: Props) {
+  const container: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: stagger } },
+  };
 
-export default StaggerChildren;
+  return (
+    <motion.div
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-40px" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}

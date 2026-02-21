@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import desktopBg from "@/assets/desktop-bg.jpg";
@@ -76,26 +77,26 @@ const HeroSection = () => {
           transition={{ delay: 2.2, duration: 0.6 }}
           className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 px-2 w-full">
 
-          <a
-            href="#projects"
+          <Link
+            to="/projects"
             className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base text-center
                        shadow-[0_2px_0_0_hsl(var(--primary)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:shadow-[0_1px_0_0_hsl(var(--primary)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none
                        transition-all duration-150">
             View Projects
-          </a>
-          <a
-            href="#services"
+          </Link>
+          <Link
+            to="/services"
             className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-accent text-accent-foreground font-mono font-semibold text-sm sm:text-base text-center
                        shadow-[0_2px_0_0_hsl(var(--accent)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:shadow-[0_1px_0_0_hsl(var(--accent)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none
                        transition-all duration-150">
             Services
-          </a>
-          <a
-            href="#contact"
+          </Link>
+          <Link
+            to="/contact"
             className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl border border-border text-foreground font-mono font-semibold text-sm sm:text-base text-center
                        shadow-[0_2px_0_0_hsl(var(--border)),inset_0_1px_0_0_hsl(0_0%_100%/0.05)]
                        hover:shadow-[0_1px_0_0_hsl(var(--border)),inset_0_1px_0_0_hsl(0_0%_100%/0.05)]
@@ -103,7 +104,7 @@ const HeroSection = () => {
                        active:translate-y-[2px] active:shadow-none
                        transition-all duration-150">
             Get in Touch
-          </a>
+          </Link>
         </motion.div>
       </motion.div>
 

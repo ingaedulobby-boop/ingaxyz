@@ -38,7 +38,7 @@ const Taskbar = () => {
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-          className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 safe-bottom"
+          className="fixed bottom-4 left-4 z-50 flex flex-col gap-2 safe-bottom"
         >
           <ThemeToggle />
           <button
@@ -58,7 +58,7 @@ const Taskbar = () => {
               initial={{ x: -100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
-              className="fixed bottom-4 left-4 z-50 flex flex-wrap gap-2 max-w-[60vw] safe-bottom"
+              className="fixed bottom-16 left-4 z-50 flex flex-wrap gap-2 max-w-[60vw] safe-bottom"
             >
               {minimizedWindows.map((w) => (
                 <motion.button

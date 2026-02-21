@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useParallax } from "@/hooks/useParallax";
 
 const wcagChecks = [
@@ -78,18 +78,9 @@ export default function AccessibilityHero() {
   const { ref, y } = useParallax(0.3);
   const prefersReduced = useReducedMotion();
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
-  );
-
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || prefersReduced) return;
+    if (prefersReduced) return;
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / 25;
     const yVal = (e.clientY - top - height / 2) / 25;
@@ -123,12 +114,12 @@ export default function AccessibilityHero() {
 
       {/* Main glassmorphism card */}
       <motion.div
-        className="relative z-10 w-full max-w-2xl rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 p-5 sm:p-7 shadow-[0_0_60px_rgba(34,197,94,0.12)]"
+        className="relative z-10 w-full max-w-2xl rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 p-5 sm:p-7 shadow-[0_0_60px_rgba(34,197,94,0.12)] hero-parallax-layer"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 160, damping: 20 }}
         style={{
-          transform: isMobile || prefersReduced
+          transform: prefersReduced
             ? undefined
             : `perspective(1000px) rotateX(${-tilt.y}deg) rotateY(${tilt.x}deg)`,
           transition: "transform 0.15s ease-out",

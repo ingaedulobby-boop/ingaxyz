@@ -30,10 +30,21 @@ const HeroSection = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}>
 
-          <p className="font-mono text-primary text-xs sm:text-sm tracking-widest mb-3 sm:mb-4 uppercase">
-            AI Engineer · UX Designer · Researcher
-          </p>
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-mono font-bold leading-tight mb-4 sm:mb-6">
+          {/* Role badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm mb-6 sm:mb-8"
+          >
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="font-mono text-primary text-[11px] sm:text-xs tracking-widest uppercase">
+              AI Engineer · UX Designer · Researcher
+            </span>
+          </motion.div>
+
+          {/* Main headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-mono font-bold leading-[1.1] mb-5 sm:mb-6">
             {displayed}
             {!done && <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />}
             {done &&
@@ -47,9 +58,13 @@ const HeroSection = () => {
               </motion.span>
             }
           </h1>
-          <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
+
+          {/* Tagline */}
+          <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed">
             Bridging cutting-edge machine learning with human-centered design.
-            Every model I build is grounded in real user needs.
+          </p>
+          <p className="text-muted-foreground/70 text-sm sm:text-base max-w-xl mx-auto mb-10 sm:mb-12">
+            Every model I build is grounded in real user needs — from research to production.
           </p>
         </motion.div>
 
@@ -57,12 +72,11 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 0.6 }}
-          className="flex flex-row flex-wrap justify-center items-center
-            gap-2 sm:gap-3 px-2 w-full">
+          className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 px-2 w-full">
 
           <a
             href="#projects"
-            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-primary text-primary-foreground font-mono font-medium text-xs sm:text-sm text-center
+            className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base text-center
                        shadow-[0_2px_0_0_hsl(var(--primary)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:shadow-[0_1px_0_0_hsl(var(--primary)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none
@@ -71,7 +85,7 @@ const HeroSection = () => {
           </a>
           <a
             href="#services"
-            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-accent text-accent-foreground font-mono font-medium text-xs sm:text-sm text-center
+            className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-accent text-accent-foreground font-mono font-semibold text-sm sm:text-base text-center
                        shadow-[0_2px_0_0_hsl(var(--accent)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:shadow-[0_1px_0_0_hsl(var(--accent)/0.6),inset_0_1px_0_0_hsl(0_0%_100%/0.15)]
                        hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none
@@ -80,7 +94,7 @@ const HeroSection = () => {
           </a>
           <a
             href="#contact"
-            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg border border-border text-foreground font-mono font-medium text-xs sm:text-sm text-center
+            className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl border border-border text-foreground font-mono font-semibold text-sm sm:text-base text-center
                        shadow-[0_2px_0_0_hsl(var(--border)),inset_0_1px_0_0_hsl(0_0%_100%/0.05)]
                        hover:shadow-[0_1px_0_0_hsl(var(--border)),inset_0_1px_0_0_hsl(0_0%_100%/0.05)]
                        hover:translate-y-[1px] hover:border-primary hover:text-primary
@@ -101,8 +115,8 @@ const HeroSection = () => {
           <div className="w-1 h-2 rounded-full bg-primary" />
         </div>
       </motion.div>
-    </section>);
-
+    </section>
+  );
 };
 
 export default HeroSection;

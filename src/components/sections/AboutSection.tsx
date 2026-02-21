@@ -17,7 +17,7 @@ const AboutSection = () => {
     <WindowPanel title="about_me.md" id="about" accent="accent" draggable>
       <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         <div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5 leading-tight">
             The <span className="text-gradient">intersection</span> is where the magic happens.
           </h2>
           <p className="leading-relaxed mb-3 sm:mb-4 text-muted-foreground text-sm sm:text-base">

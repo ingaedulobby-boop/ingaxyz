@@ -71,29 +71,37 @@ export default function ProjectDetail() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
         {/* Meta */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-6 rounded-xl glass"
         >
-          <div>
+          <motion.div initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ delay: 0.1, duration: 0.5 }}>
             <p className="font-mono text-xs text-primary mb-1">Role</p>
             <p className="text-sm text-foreground">{project.role}</p>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ delay: 0.2, duration: 0.5 }}>
             <p className="font-mono text-xs text-primary mb-1">Duration</p>
             <p className="text-sm text-foreground">{project.duration}</p>
-          </div>
-          <div className="col-span-2 sm:col-span-1">
+          </motion.div>
+          <motion.div initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ delay: 0.3, duration: 0.5 }} className="col-span-2 sm:col-span-1">
             <p className="font-mono text-xs text-primary mb-1">Tools</p>
             <div className="flex flex-wrap gap-1">
-              {project.tools.map((t) => (
-                <span key={t} className="text-xs px-2 py-0.5 rounded bg-secondary text-secondary-foreground">
+              {project.tools.map((t, ti) => (
+                <motion.span
+                  key={t}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: false }}
+                  transition={{ delay: 0.3 + ti * 0.05, duration: 0.3 }}
+                  className="text-xs px-2 py-0.5 rounded bg-secondary text-secondary-foreground"
+                >
                   {t}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Narrative */}
@@ -101,10 +109,10 @@ export default function ProjectDetail() {
           {project.narrative.map((paragraph, i) => (
             <motion.p
               key={i}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
+              initial={{ opacity: 0, y: 25, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ delay: i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="text-muted-foreground leading-relaxed"
             >
               {paragraph}
@@ -114,18 +122,19 @@ export default function ProjectDetail() {
 
         {/* Results */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="grid grid-cols-2 sm:grid-cols-4 gap-4"
         >
           {project.results.map((r, i) => (
             <motion.div
               key={r.label}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: false }}
+              transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="text-center p-4 rounded-xl glass"
             >
               <p className="text-2xl sm:text-3xl font-mono font-bold text-primary">{r.value}</p>
@@ -135,7 +144,13 @@ export default function ProjectDetail() {
         </motion.div>
 
         {/* Next project */}
-        <div className="border-t border-border pt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="border-t border-border pt-8"
+        >
           <Link
             to={`/project/${nextProject.slug}`}
             className="group flex items-center justify-between p-6 rounded-xl glass hover:border-primary/40 transition-all"
@@ -148,7 +163,7 @@ export default function ProjectDetail() {
             </div>
             <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
           </Link>
-        </div>
+        </motion.div>
       </main>
     </div>
   );

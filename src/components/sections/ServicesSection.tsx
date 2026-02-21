@@ -1,4 +1,5 @@
 import WindowPanel from "@/components/WindowPanel";
+import SectionHeader from "@/components/SectionHeader";
 import { Cpu, PenTool, FlaskConical, Zap } from "lucide-react";
 import StaggerChildren, { staggerItem } from "@/components/StaggerChildren";
 import { motion } from "framer-motion";
@@ -118,12 +119,10 @@ function ServiceCard({
 const ServicesSection = () => {
   return (
     <WindowPanel title="services.config" id="services" accent="accent" draggable>
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
-        What I <span className="text-gradient">Offer</span>
-      </h2>
-      <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">
-        Tailored solutions at the intersection of AI and UX.
-      </p>
+      <SectionHeader
+        title={<>What I <span className="text-gradient">Offer</span></>}
+        subtitle="Tailored solutions at the intersection of AI and UX."
+      />
 
       <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {services.map((service) => (

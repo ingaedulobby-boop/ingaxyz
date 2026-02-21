@@ -6,6 +6,62 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// --- Rate Limiting ---
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 10;
+const ipRequests = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = ipRequests.get(ip)?.filter((t) => now - t < RATE_LIMIT_WINDOW_MS) ?? [];
+  ipRequests.set(ip, timestamps);
+  if (timestamps.length >= RATE_LIMIT_MAX) return true;
+  timestamps.push(now);
+  return false;
+}
+
+// Periodic cleanup every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, timestamps] of ipRequests) {
+    const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+    if (valid.length === 0) ipRequests.delete(ip);
+    else ipRequests.set(ip, valid);
+  }
+}, 300_000);
+
+// --- Input Validation ---
+const ALLOWED_ROLES = new Set(["user", "assistant"]);
+const MAX_MESSAGES = 50;
+const MAX_CONTENT_LENGTH = 2000;
+
+interface ChatMessage {
+  role: string;
+  content: string;
+}
+
+function validateMessages(raw: unknown): { valid: true; messages: ChatMessage[] } | { valid: false; error: string } {
+  if (!Array.isArray(raw)) return { valid: false, error: "messages must be an array" };
+  if (raw.length > MAX_MESSAGES) return { valid: false, error: `Maximum ${MAX_MESSAGES} messages allowed` };
+
+  const sanitized: ChatMessage[] = [];
+  for (const msg of raw) {
+    if (typeof msg !== "object" || msg === null) return { valid: false, error: "Each message must be an object" };
+    const { role, content } = msg as Record<string, unknown>;
+    if (typeof role !== "string" || typeof content !== "string") {
+      return { valid: false, error: "Each message must have string role and content" };
+    }
+    // Strip system role messages (prevent prompt injection)
+    if (role === "system") continue;
+    if (!ALLOWED_ROLES.has(role)) return { valid: false, error: `Invalid role: ${role}` };
+    if (content.length > MAX_CONTENT_LENGTH) {
+      return { valid: false, error: `Message content exceeds ${MAX_CONTENT_LENGTH} character limit` };
+    }
+    sanitized.push({ role, content });
+  }
+  return { valid: true, messages: sanitized };
+}
+
 const SYSTEM_PROMPT = `You are the AI assistant for a portfolio website belonging to a hybrid AI Engineer & UX Designer. Your role is to help visitors learn about this professional's work, skills, and services.
 
 About the professional:
@@ -36,8 +92,28 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Rate limiting by IP
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("cf-connecting-ip") || "unknown";
+  if (isRateLimited(ip)) {
+    return new Response(
+      JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
+      { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
+
+    // Validate input
+    const result = validateMessages(body.messages);
+    if (!result.valid) {
+      return new Response(
+        JSON.stringify({ error: result.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -53,7 +129,7 @@ serve(async (req) => {
           model: "google/gemini-3-flash-preview",
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
-            ...messages,
+            ...result.messages,
           ],
           stream: true,
         }),

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useRef, useEffect } from "react";
-import * as THREE from "three";
+import { useRef } from "react";
 import desktopBg from "@/assets/desktop-bg.jpg";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -11,8 +10,6 @@ const AFTER_TEXT = " people love to use.";
 
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -20,131 +17,60 @@ const HeroSection = () => {
 
   const prefersReducedMotion = useReducedMotion();
 
+  // Parallax — CSS handles disabling on mobile via the wrapper class
   const bgY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? ["0%", "0%"] : ["0%", "30%"]);
-
   const contentY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? ["0%", "0%"] : ["0%", "15%"]);
-
   const opacity = useTransform(scrollYProgress, [0, 0.8], prefersReducedMotion ? [1, 1] : [1, 0]);
 
   const { displayed, done } = useTypingEffect(FULL_TEXT, 55, 600);
+
   const ctaDelay = prefersReducedMotion ? 0 : 2.2;
-
-  // =============================
-  // THREE.JS PARTICLE BACKGROUND
-  // =============================
-  useEffect(() => {
-    if (!canvasRef.current || prefersReducedMotion) return;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-    });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    canvasRef.current.appendChild(renderer.domElement);
-
-    const particleCount = 25000;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
-      const radius = 1.8 + Math.random() * 0.5;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
-
-      positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      positions[i3 + 2] = radius * Math.cos(phi);
-    }
-
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-
-    const material = new THREE.PointsMaterial({
-      size: 0.015,
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.6,
-    });
-
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
-
-    const clock = new THREE.Clock();
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      const elapsed = clock.getElapsedTime();
-
-      points.rotation.y = elapsed * 0.08;
-      points.rotation.x = elapsed * 0.04;
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      canvasRef.current?.removeChild(renderer.domElement);
-      geometry.dispose();
-      material.dispose();
-    };
-  }, [prefersReducedMotion]);
 
   return (
     <section
       ref={ref}
       id="home"
       aria-label="Inga portfolio hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Three.js Canvas */}
-      <div ref={canvasRef} className="absolute inset-0 z-0" />
-
-      {/* Fallback Background Image */}
+      {/* Background — parallax disabled on small screens via CSS */}
       <motion.div
-        className="absolute inset-0 hero-parallax-layer z-0"
+        className="absolute inset-0 hero-parallax-layer"
         style={prefersReducedMotion ? {} : { y: bgY }}
         aria-hidden="true"
       >
-        <img src={desktopBg} alt="" className="w-full h-full object-cover opacity-20 scale-110" loading="eager" />
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
+        <img src={desktopBg} alt="" className="w-full h-full object-cover opacity-30 scale-110" loading="eager" />
+
+        <div className="absolute inset-0 bg-background/50" />
       </motion.div>
 
-      {/* Content */}
+      {/* Mesh gradient overlay */}
+      <div className="absolute inset-0 bg-mesh pointer-events-none" aria-hidden="true" />
+
+      {/* Content wrapper — parallax disabled on small screens via CSS */}
       <motion.div
-        className="relative z-10 text-center section-px max-w-4xl mx-auto py-20 sm:py-0"
+        className="relative z-10 text-center section-px max-w-4xl mx-auto py-20 sm:py-0 hero-parallax-layer"
         style={prefersReducedMotion ? {} : { y: contentY, opacity }}
       >
-        {/* Role Badge */}
-        <div className="mb-8 flex justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 backdrop-blur-md">
+        {/* Role badge */}
+        <div className="mb-6 sm:mb-8 min-h-[32px] flex items-center justify-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm animate-fade-in">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-mono text-primary text-xs tracking-widest uppercase">
+            <span className="font-mono text-primary text-[9px] sm:text-xs tracking-widest uppercase">
               AI Engineer · UX Designer · Researcher
             </span>
           </div>
         </div>
 
-        {/* Headline */}
-        <h1 className="relative font-mono font-bold leading-[1.1] mb-6 min-h-[2.4em] text-[clamp(1.75rem,5vw,4.5rem)] text-white">
-          <span aria-live="polite" aria-atomic="true">
-            {displayed}
-            {!done && <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse" />}
+        {/* Headline — fluid text scaling */}
+        <h1 className="relative font-mono font-bold leading-[1.1] mb-5 sm:mb-6 min-h-[2.4em] text-[clamp(1.75rem,5vw,4.5rem)]">
+          <span aria-live="polite" aria-atomic="true" className="inline-block">
+            <span aria-hidden="true">
+              {displayed}
+              {!done && (
+                <span className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 animate-pulse-glow align-middle" />
+              )}
+            </span>
           </span>
           {done && (
             <span className="animate-fade-in">
@@ -152,40 +78,69 @@ const HeroSection = () => {
               <span className="text-gradient">people love</span> to use.
             </span>
           )}
+          <span className="invisible absolute inset-0 pointer-events-none" aria-hidden="true">
+            {FULL_TEXT}
+            {AFTER_TEXT}
+          </span>
         </h1>
 
         {/* Tagline */}
-        <p className="text-muted-foreground max-w-2xl mx-auto mb-3 leading-relaxed">
+        <p
+          className="text-muted-foreground text-[clamp(0.938rem,2.5vw,1.25rem)] max-w-2xl mx-auto mb-3 leading-relaxed"
+          style={{ fontFamily: "var(--font-serif)" }}
+        >
           Bridging cutting-edge machine learning with human-centered design.
         </p>
-
-        <p className="max-w-xl mx-auto mb-12 font-light text-xs text-primary">
+        <p className="max-w-xl mx-auto mb-10 sm:mb-12 font-light text-xs text-primary">
           Every model I build is grounded in real user needs — from research to production. 💜
         </p>
 
-        {/* CTAs */}
+        {/* CTAs — column on mobile, row on sm+ */}
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: ctaDelay, duration: 0.6 }}
-          className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4"
+          transition={{ delay: ctaDelay, duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 w-full"
         >
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold shadow-lg hover:-translate-y-1 transition-all"
+            className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-[40px] px-6 sm:px-8 py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold text-sm sm:text-base shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)] hover:shadow-[0_6px_20px_0_hsl(var(--primary)/0.4)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_8px_0_hsl(var(--primary)/0.3)] transition-all duration-200"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
             View Projects
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight
+              className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 transition-transform"
+              aria-hidden="true"
+            />
+          </Link>
+
+          <Link
+            to="/services"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-[40px] px-6 sm:px-8 py-3 rounded-xl bg-secondary text-secondary-foreground font-mono font-semibold text-sm sm:text-base border border-border hover:border-primary/40 hover:bg-secondary/80 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+          >
+            Services
           </Link>
 
           <Link
             to="/contact"
-            className="px-8 py-3 rounded-xl border border-primary/40 text-primary font-mono font-semibold hover:bg-primary/10 transition-all"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-[40px] px-6 sm:px-8 py-3 rounded-xl border border-border/60 text-muted-foreground font-mono font-semibold text-sm sm:text-base hover:border-primary hover:text-primary hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
           >
             Get in Touch
           </Link>
         </motion.div>
+      </motion.div>
+
+      {/* Scroll indicator – hidden on mobile via CSS */}
+      <motion.div
+        animate={prefersReducedMotion ? {} : { y: [0, 8, 0] }}
+        transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        className="absolute bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 hidden sm:block"
+        style={prefersReducedMotion ? {} : { opacity }}
+        aria-hidden="true"
+      >
+        <div className="w-5 h-8 rounded-full border-2 border-muted-foreground/40 flex items-start justify-center p-1">
+          <div className="w-1 h-2 rounded-full bg-primary" />
+        </div>
       </motion.div>
     </section>
   );

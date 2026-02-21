@@ -1,14 +1,28 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Loader2, Bot, User } from "lucide-react";
+import { X, Send, Loader2, Bot, User, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+const STORAGE_KEY = "ai-chat-history";
+
+function loadMessages(): Msg[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore corrupt data */ }
+  return [];
+}
+
+function saveMessages(msgs: Msg[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
+  } catch { /* storage full or unavailable */ }
+}
 
 async function streamChat({
   messages,
@@ -98,7 +112,7 @@ interface AIChatWindowProps {
 
 export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWindowProps) {
   const isMobile = useIsMobile();
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [messages, setMessages] = useState<Msg[]>(loadMessages);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -113,7 +127,9 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
     });
   }, []);
 
+  // Save messages to localStorage whenever they change
   useEffect(() => {
+    saveMessages(messages);
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
@@ -214,15 +230,28 @@ export default function AIChatWindow({ isOpen, onClose, onNewMessage }: AIChatWi
               <Bot className="w-4 h-4 text-primary" />
               <span className="text-xs font-mono tracking-wide text-primary">ai_assistant</span>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={onClose}
-              aria-label="Close chat"
-            >
-              <X className="w-4 h-4" />
-            </Button>
+            <div className="flex items-center gap-1">
+              {messages.length > 0 && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  onClick={() => { setMessages([]); localStorage.removeItem(STORAGE_KEY); }}
+                  aria-label="Clear chat history"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={onClose}
+                aria-label="Close chat"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
 
           {/* Messages */}

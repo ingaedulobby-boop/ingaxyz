@@ -2,3 +2,6 @@ project_id = "cuwhudgynlntscwsmmve"
 
 [functions.send-contact-email]
 verify_jwt = false
+
+[functions.fetch-substack-feed]
+verify_jwt = false

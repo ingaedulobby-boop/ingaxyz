@@ -92,23 +92,67 @@ const HeroSection = () => {
         <p className="max-w-xl mx-auto text-primary text-sm font-light mb-12">
           Every model I build is grounded in real user needs — from research to production.
         </p>
+{/* CTA Buttons */}
+<motion.div
+  initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: ctaDelay, duration: 0.5 }}
+  className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto"
+>
+  {/* Projects */}
+  <Link
+    to="/projects"
+    className="group inline-flex items-center justify-center gap-1.5
+               w-full sm:w-auto
+               px-5 py-2
+               text-sm
+               rounded-lg
+               bg-primary text-primary-foreground
+               font-mono font-medium
+               shadow-md
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:shadow-lg"
+  >
+    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+    View Projects
+    <ArrowRight className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-1 transition-transform" />
+  </Link>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: ctaDelay, duration: 0.6 }}
-          className="flex flex-col sm:flex-row justify-center items-center gap-3">
+  {/* Services */}
+  <Link
+    to="/services"
+    className="inline-flex items-center justify-center
+               w-full sm:w-auto
+               px-5 py-2
+               text-sm
+               rounded-lg
+               border border-white/20
+               bg-white/5
+               backdrop-blur-md
+               font-mono font-medium
+               transition-all duration-200
+               hover:bg-white/10 hover:-translate-y-0.5"
+  >
+    Services
+  </Link>
 
-          {/* Projects */}
-          <Link
-            to="/projects"
-            className="group inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-primary text-primary-foreground font-mono font-semibold shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
-
-            <Sparkles className="w-4 h-4" />
-            View Projects
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+  {/* Contact */}
+  <Link
+    to="/contact"
+    className="inline-flex items-center justify-center
+               w-full sm:w-auto
+               px-5 py-2
+               text-sm
+               rounded-lg
+               border border-primary/60
+               text-primary
+               font-mono font-medium
+               transition-all duration-200
+               hover:bg-primary/10 hover:-translate-y-0.5"
+  >
+    Get in Touch
+  </Link>
+</motion.div>
 
           {/* Services */}
           <Link

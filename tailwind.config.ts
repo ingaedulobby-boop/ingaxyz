@@ -14,17 +14,18 @@ export default {
   	},
   	extend: {
   		fontFamily: {
-  			mono: [
-  				'SF Mono',
-  				'ui-monospace',
-  				'SFMono-Regular',
-  				'Menlo',
-  				'Monaco',
-  				'Consolas',
-  				'Liberation Mono',
-  				'Courier New',
-  				'monospace'
-  			],
+			mono: [
+				'JetBrains Mono',
+				'SF Mono',
+				'ui-monospace',
+				'SFMono-Regular',
+				'Menlo',
+				'Monaco',
+				'Consolas',
+				'Liberation Mono',
+				'Courier New',
+				'monospace'
+			],
   			sans: [
   				'Nunito',
   				'ui-sans-serif',
